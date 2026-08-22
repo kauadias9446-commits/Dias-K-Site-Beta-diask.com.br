@@ -1603,23 +1603,37 @@ function respostaLocal(messages) {
   const totalMensagens = mensagensDoUsuario.length;
   const textoCompleto = mensagensDoUsuario.map(message => message.content).join(' ').toLowerCase();
   const semAcentos = textoCompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const assunto = semAcentos.includes('dinheiro') || semAcentos.includes('divida') || semAcentos.includes('guardar') || semAcentos.includes('gasto')
-    ? 'financeiro' : semAcentos.includes('tempo') || semAcentos.includes('trabalho') || semAcentos.includes('cansad') || semAcentos.includes('rotina')
-      ? 'rotina' : semAcentos.includes('familia') || semAcentos.includes('relacion') || semAcentos.includes('conversa')
-        ? 'relacionamentos' : 'pessoal';
-  const mencionaObjetivo = /quero|preciso|gostaria|pretendo|meta|objetivo/i.test(textoCompleto);
-  const mencionaTentativa = /tentei|comecei|fiz|ja tentei|nao consegui manter/i.test(textoCompleto);
+  const temas = {
+    financeiro: ['dinheiro', 'divida', 'guardar', 'gasto', 'renda', 'salario', 'conta'],
+    rotina: ['tempo', 'trabalho', 'cansad', 'rotina', 'procrast', 'agenda', 'sono'],
+    relacionamentos: ['familia', 'relacion', 'conversa', 'casamento', 'filho', 'sozinh'],
+    pessoal: ['medo', 'ansiedade', 'mudan', 'disciplina', 'desanimo', 'objetivo']
+  };
+  const pontuacoes = Object.fromEntries(Object.entries(temas).map(([tema, palavras]) => [
+    tema, palavras.reduce((total, palavra) => total + (semAcentos.includes(palavra) ? 1 : 0), 0)
+  ]));
+  const assunto = Object.entries(pontuacoes).sort((a, b) => b[1] - a[1])[0][1] > 0
+    ? Object.entries(pontuacoes).sort((a, b) => b[1] - a[1])[0][0] : 'pessoal';
+  const mencionaObjetivo = /quero|preciso|gostaria|pretendo|meta|objetivo|sonho/i.test(semAcentos);
+  const mencionaTentativa = /tentei|comecei|fiz|ja tentei|nao consegui manter|parei/i.test(semAcentos);
+  const mencionaPrazo = /hoje|amanha|semana|mes|ano|urgente|prazo|logo/i.test(semAcentos);
   const foco = {
     financeiro: 'sua relação com o dinheiro',
     rotina: 'sua rotina e o espaço que o trabalho ocupa',
     relacionamentos: 'a relação com as pessoas importantes para você',
     pessoal: 'essa situação que você trouxe'
   }[assunto];
-  const plano = {
-    financeiro: 'Durante os próximos 7 dias, registre cada entrada e saída no momento em que acontecer. No fim do dia, marque o que foi essencial, adiável ou automático. A métrica é descobrir para onde foi 100% do dinheiro, sem tentar cortar tudo de uma vez.',
-    rotina: 'Durante os próximos 7 dias, anote em blocos de 30 minutos onde seu tempo realmente foi gasto. Escolha apenas uma atividade para reduzir e reserve dois blocos curtos para o que importa. A métrica é quantos blocos protegidos você conseguiu cumprir.',
-    relacionamentos: 'Durante os próximos 7 dias, escolha uma pessoa e combine uma conversa de 20 minutos sem celular. Observe o que você evita dizer e o que muda quando escuta antes de responder. A métrica é a qualidade do contato, não a quantidade de conversas.',
-    pessoal: 'Durante os próximos 7 dias, transforme o problema em uma ação de 15 minutos, repetida no mesmo horário. Ao final, registre o que facilitou ou bloqueou a ação. A métrica é a consistência, não a perfeição.'
+  const proximoPasso = {
+    financeiro: 'registre entradas, saídas e o motivo de cada gasto por sete dias antes de cortar qualquer coisa',
+    rotina: 'observe sua agenda em blocos de 30 minutos e proteja um bloco curto para a prioridade do dia',
+    relacionamentos: 'marque uma conversa de 20 minutos, ouvindo primeiro e levando um ponto concreto para dizer',
+    pessoal: 'escolha uma ação de 15 minutos e repita no mesmo horário durante sete dias'
+  }[assunto];
+  const criterio = {
+    financeiro: 'saber para onde o dinheiro está indo',
+    rotina: 'quantos blocos protegidos foram cumpridos',
+    relacionamentos: 'se a conversa ficou mais clara e menos defensiva',
+    pessoal: 'quantos dias a ação aconteceu, sem exigir perfeição'
   }[assunto];
 
   if (totalMensagens === 1) {
@@ -1636,10 +1650,11 @@ function respostaLocal(messages) {
   }
 
   if (totalMensagens === 5) {
-    return `Pelo que você contou, o ponto central parece estar em ${foco}, e não apenas no sintoma inicial. O padrão que aparece é: existe um efeito concreto, um objetivo importante e uma barreira que dificulta a constância. Minha sugestão é começar pequeno: ${plano} Isso não é uma solução definitiva, mas cria evidência para decidir o próximo passo com mais precisão.`;
+    const urgencia = mencionaPrazo ? 'Como você mencionou um prazo, vale separar o que precisa ser resolvido agora do que pode ser construído depois. ' : '';
+    return `Pelo que você contou, o ponto central parece estar em ${foco}, e não apenas no sintoma inicial. ${urgencia}Minha sugestão é um experimento de sete dias: ${proximoPasso}. Ao final, use como critério ${criterio}. Isso não é uma solução definitiva; é uma forma de criar evidência antes de tomar uma decisão maior.`;
   }
 
-  return `Com o que você trouxe até aqui, eu manteria o foco em ${foco}. O próximo passo mais útil é revisar o experimento: o que funcionou, em qual momento você travou e o que precisaria ser ajustado para ficar possível na sua rotina? Evite aumentar a meta antes de entender essa resposta.`;
+  return `Com o que você trouxe até aqui, eu manteria o foco em ${foco}. Em vez de aumentar a meta, revise o experimento: o que funcionou, em qual momento você travou e o que precisaria mudar para atender ao critério de ${criterio}? Essa resposta indica o próximo ajuste com mais precisão.`;
 }
 
 async function iniciarConversa() {
