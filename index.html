@@ -432,7 +432,7 @@ nav a:hover { color: var(--black); }
   margin-bottom: 20px;
 }
 .ia-texto {
-  font-family: var(--serif);
+files  font-family: var(--serif);
   font-size: 18px;
   font-weight: 400;
   line-height: 1.75;
@@ -1421,7 +1421,22 @@ campoInput.addEventListener('input', () => {
   campoInput.style.height = campoInput.scrollHeight + 'px';
 });
 
-/* ─── CONVERSA COM CLAUDE ─── */
+/* ─── CONVERSA COM DIAS K ─── */
+const API_URL = '';
+const historico = [];
+
+async function pedirResposta(messages) {
+  if (!API_URL) throw new Error('Worker ainda não configurado.');
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages })
+  });
+  const data = await response.json();
+  if (!response.ok || data.error) throw new Error(data.error || 'Falha na conversa.');
+  return data.reply || 'Estou aqui. Pode continuar.';
+}
+
 async function iniciarConversa() {
   const texto = campoInput.value.trim();
   if (!texto) {
@@ -1440,38 +1455,16 @@ async function iniciarConversa() {
   resposta.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        system: `Você é o assistente da Dias K — uma empresa de inteligência e acompanhamento para pessoas comuns que querem compreender e melhorar problemas reais da própria vida.
-
-Princípios que guiam sua resposta:
-- Antes de sugerir qualquer solução, entenda o problema profundamente
-- O problema que a pessoa diz ter pode não ser o problema real
-- Nunca prometa resultados garantidos ou soluções fáceis
-- Fale como uma pessoa inteligente e empática, não como um chatbot ou coach
-- Não use jargões, não use listas de bullets excessivas, não use exclamações
-- Seja humano, próximo e sério ao mesmo tempo
-- Faça no máximo 1 ou 2 perguntas de investigação, não bombardeie a pessoa
-- Tom: calmo, inteligente, sofisticado, confiável, humano
-- Responda sempre em português brasileiro
-- Nunca mencione tecnologia, IA ou sistemas — seja apenas uma presença que escuta
-- Suas respostas devem ser curtas a médias, nunca longas demais
-- Comece reconhecendo o que a pessoa disse, depois aprofunde gentilmente`,
-        messages: [{ role: 'user', content: texto }]
-      })
-    });
-
-    const data = await response.json();
-    const reply = data.content?.map(b => b.text || '').join('') || 'Estou aqui. Pode continuar.';
+    historico.push({ role: 'user', content: texto });
+    const reply = await pedirResposta(historico);
+    historico.push({ role: 'assistant', content: reply });
 
     iaTexto.textContent = '';
     typeTextSlow(iaTexto, reply);
   } catch (err) {
-    iaTexto.textContent = 'Estou aqui. Conte mais um pouco — às vezes a conexão falha, mas a conversa não precisa parar.';
+    iaTexto.textContent = API_URL
+      ? 'Não consegui me conectar agora. Tente novamente em instantes.'
+      : 'A conversa está pronta, mas ainda falta conectar o endereço do atendimento.';
   }
 
   cta.disabled = false;
@@ -1479,21 +1472,12 @@ Princípios que guiam sua resposta:
   cta.onclick = continuarConversa;
 }
 
-let historico = [];
-
 async function continuarConversa() {
   const texto = campoInput.value.trim();
   if (!texto) { campoInput.focus(); return; }
 
   const iaTexto = document.getElementById('iaTexto');
   const cta = document.getElementById('campoCta');
-  const respostaAtual = iaTexto.textContent;
-
-  if (respostaAtual && !historico.length) {
-    historico.push({ role: 'user', content: campoInput.value });
-    historico.push({ role: 'assistant', content: respostaAtual });
-  }
-
   historico.push({ role: 'user', content: texto });
   campoInput.value = '';
   campoInput.style.height = 'auto';
@@ -1503,33 +1487,7 @@ async function continuarConversa() {
   iaTexto.innerHTML = '<div class="ia-carregando"><div class="ia-dots"><span></span><span></span><span></span></div></div>';
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        system: `Você é o assistente da Dias K — uma empresa de inteligência e acompanhamento para pessoas comuns que querem compreender e melhorar problemas reais da própria vida.
-
-Princípios que guiam sua resposta:
-- Antes de sugerir qualquer solução, entenda o problema profundamente
-- O problema que a pessoa diz ter pode não ser o problema real
-- Nunca prometa resultados garantidos ou soluções fáceis
-- Fale como uma pessoa inteligente e empática, não como um chatbot ou coach
-- Não use jargões, não use listas de bullets excessivas, não use exclamações
-- Seja humano, próximo e sério ao mesmo tempo
-- Faça no máximo 1 ou 2 perguntas de investigação, não bombardeie a pessoa
-- Tom: calmo, inteligente, sofisticado, confiável, humano
-- Responda sempre em português brasileiro
-- Nunca mencione tecnologia, IA ou sistemas — seja apenas uma presença que escuta
-- Suas respostas devem ser curtas a médias, nunca longas demais
-- Continue a conversa de forma natural, lembrando o que já foi dito`,
-        messages: historico
-      })
-    });
-
-    const data = await response.json();
-    const reply = data.content?.map(b => b.text || '').join('') || 'Estou aqui. Continue.';
+    const reply = await pedirResposta(historico);
     historico.push({ role: 'assistant', content: reply });
     iaTexto.textContent = '';
     typeTextSlow(iaTexto, reply);
