@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 /* ─── TOKENS ─── */
 :root {
@@ -978,6 +979,18 @@ footer {
   margin-bottom: 28px;
 }
 .login-form { display: grid; gap: 16px; }
+.google-login { margin-bottom: 20px; min-height: 44px; }
+.login-ou {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--stone);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 18px 0;
+}
+.login-ou::before, .login-ou::after { content: ''; height: 1px; flex: 1; background: rgba(119,115,108,.2); }
 .login-campo { display: grid; gap: 7px; }
 .login-campo label {
   color: var(--stone);
@@ -1519,6 +1532,9 @@ footer {
     <h2 class="login-titulo" id="loginTitulo">Voltar para sua jornada.</h2>
     <p class="login-intro" id="loginIntro">Entre para continuar de onde parou.</p>
 
+    <div class="google-login" id="googleLogin"></div>
+    <div class="login-ou">ou</div>
+
     <form class="login-form" id="loginForm">
       <div class="login-campo">
         <label for="loginEmail">E-mail</label>
@@ -1702,7 +1718,37 @@ const loginSubmit = document.getElementById('loginSubmit');
 const loginSession = document.getElementById('loginSession');
 const loginTitulo = document.getElementById('loginTitulo');
 const loginIntro = document.getElementById('loginIntro');
+const googleLogin = document.getElementById('googleLogin');
+const googleClientId = '283689691923-62e341o5p6cto65hok847t7i3ce53pv3.apps.googleusercontent.com';
 let modoCadastro = false;
+
+function inicializarGoogleLogin() {
+  if (!window.google?.accounts?.id) return;
+  window.google.accounts.id.initialize({
+    client_id: googleClientId,
+    callback: receberLoginGoogle,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+  window.google.accounts.id.renderButton(googleLogin, {
+    theme: 'outline',
+    size: 'large',
+    text: 'signin_with',
+    shape: 'rectangular',
+    width: 344
+  });
+}
+
+function receberLoginGoogle(resposta) {
+  try {
+    const payload = JSON.parse(atob(resposta.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    localStorage.setItem('diasK.sessao', payload.email);
+    localStorage.setItem('diasK.googleNome', payload.name || '');
+    mostrarSessao();
+  } catch {
+    loginMessage.textContent = 'Não foi possível concluir o login Google.';
+  }
+}
 
 function abrirLogin() {
   loginModal.classList.add('aberto');
@@ -1720,6 +1766,8 @@ function fecharLogin() {
 function mostrarFormulario() {
   loginForm.style.display = 'grid';
   loginSession.classList.remove('visivel');
+  googleLogin.style.display = '';
+  loginToggle.style.display = '';
   loginTitulo.textContent = modoCadastro ? 'Começar sua jornada.' : 'Voltar para sua jornada.';
   loginIntro.textContent = modoCadastro ? 'Crie seu acesso neste dispositivo.' : 'Entre para continuar de onde parou.';
   loginSubmit.textContent = modoCadastro ? 'Criar conta' : 'Entrar';
@@ -1729,6 +1777,7 @@ function mostrarFormulario() {
 function mostrarSessao() {
   loginForm.style.display = 'none';
   loginSession.classList.add('visivel');
+  googleLogin.style.display = 'none';
   loginTitulo.textContent = 'Sua jornada continua.';
   loginIntro.textContent = '';
   loginToggle.style.display = 'none';
@@ -1784,10 +1833,13 @@ loginForm.addEventListener('submit', async event => {
 });
 document.getElementById('loginLogout').addEventListener('click', () => {
   localStorage.removeItem('diasK.sessao');
+  localStorage.removeItem('diasK.googleNome');
+  window.google?.accounts?.id.disableAutoSelect();
   modoCadastro = false;
   loginToggle.style.display = '';
   mostrarFormulario();
 });
+window.addEventListener('load', inicializarGoogleLogin);
 </script>
 </body>
 </html>
