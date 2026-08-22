@@ -1438,20 +1438,41 @@ async function pedirResposta(messages) {
 }
 
 function respostaLocal(messages) {
-  const totalMensagens = messages.filter(message => message.role === 'user').length;
-  const ultimaMensagem = messages[messages.length - 1].content.toLowerCase();
+  const mensagensDoUsuario = messages.filter(message => message.role === 'user');
+  const totalMensagens = mensagensDoUsuario.length;
+  const textoCompleto = mensagensDoUsuario.map(message => message.content).join(' ').toLowerCase();
+  const ultimaMensagem = mensagensDoUsuario.at(-1).content.trim();
+  const semAcentos = textoCompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const assunto = semAcentos.includes('dinheiro') || semAcentos.includes('divida') || semAcentos.includes('guardar')
+    ? 'financeiro'
+    : semAcentos.includes('tempo') || semAcentos.includes('trabalho') || semAcentos.includes('cansad')
+      ? 'rotina'
+      : semAcentos.includes('familia') || semAcentos.includes('relacion')
+        ? 'relacionamentos'
+        : 'pessoal';
+  const mencionaObjetivo = /quero|preciso|gostaria|pretendo|meta|objetivo/i.test(textoCompleto);
+  const mencionaTentativa = /tentei|comecei|fiz|ja tentei|nao consegui manter/i.test(textoCompleto);
+  const foco = {
+    financeiro: 'sua relação com o dinheiro',
+    rotina: 'sua rotina e o espaço que o trabalho ocupa',
+    relacionamentos: 'a relação com as pessoas importantes para você',
+    pessoal: 'essa situação que você trouxe'
+  }[assunto];
 
   if (totalMensagens === 1) {
-    if (ultimaMensagem.includes('dinheiro') || ultimaMensagem.includes('finance')) {
-      return 'Entendi. Quando você diz que o dinheiro não está permitindo construir o que deseja, o que pesa mais hoje: a falta de organização, os gastos inesperados ou a renda que não acompanha suas necessidades?';
-    }
-    if (ultimaMensagem.includes('tempo') || ultimaMensagem.includes('trabalho') || ultimaMensagem.includes('cansad')) {
-      return 'Entendi. Parece que sua rotina está ocupando mais espaço do que deveria. O que hoje consome a maior parte do seu tempo e deixa você sem margem para o que considera importante?';
-    }
-    return 'Entendi. Antes de pensar em uma solução, quero compreender melhor: o que nessa situação mais está afetando sua vida neste momento?';
+    return `Entendi. Quero olhar primeiro para ${foco}, sem presumir qual é a solução. Qual é o efeito mais concreto disso na sua vida hoje?`;
+  }
+  if (totalMensagens === 2 && !mencionaObjetivo) {
+    return `Isso ajuda a dar forma ao problema. Se essa situação melhorasse nos próximos meses, o que você gostaria de conseguir fazer ou viver de maneira diferente?`;
+  }
+  if (totalMensagens === 3 && !mencionaTentativa) {
+    return 'Agora temos o impacto e o que você deseja mudar. O que costuma atrapalhar esse movimento: falta de tempo, energia, organização, dinheiro ou algo diferente?';
+  }
+  if (totalMensagens <= 4) {
+    return 'Obrigado por detalhar. Você já tentou alguma mudança específica? O que aconteceu quando tentou manter esse caminho?';
   }
 
-  return 'Obrigado por continuar. O que você já tentou fazer para mudar essa situação e o que acabou dificultando manter esse caminho?';
+  return `Pelo que você contou, o ponto central parece estar em ${foco}, afetando diretamente o que você quer construir. Antes de propor um próximo passo, qual parte desse diagnóstico parece mais importante ou mais urgente para você?`;
 }
 
 async function iniciarConversa() {
