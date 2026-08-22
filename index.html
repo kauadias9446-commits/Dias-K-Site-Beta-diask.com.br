@@ -89,6 +89,7 @@ nav a:hover { color: var(--black); }
   transition: color .2s;
 }
 .btn-entrar:hover { color: var(--black); }
+.btn-entrar.sessao-ativa { color: var(--black); }
 .btn-comecar {
   font-family: var(--sans);
   font-size: 13px;
@@ -924,6 +925,122 @@ footer {
   footer { padding: 64px 24px 40px; }
   .ia-resposta { padding: 28px 24px; }
 }
+
+/* ─── LOGIN ─── */
+.login-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(17,17,17,.58);
+}
+.login-modal.aberto { display: flex; }
+.login-painel {
+  width: min(100%, 440px);
+  position: relative;
+  background: var(--off);
+  padding: 48px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.2);
+}
+.login-fechar {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  border: 0;
+  background: transparent;
+  color: var(--stone);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+.login-label {
+  display: block;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.login-titulo {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.login-intro {
+  color: var(--stone);
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+.login-form { display: grid; gap: 16px; }
+.login-campo { display: grid; gap: 7px; }
+.login-campo label {
+  color: var(--stone);
+  font-size: 12px;
+  letter-spacing: .4px;
+}
+.login-campo input {
+  width: 100%;
+  border: 1px solid rgba(119,115,108,.3);
+  background: var(--white);
+  color: var(--black);
+  font: 400 15px var(--sans);
+  padding: 13px 14px;
+  outline: none;
+}
+.login-campo input:focus { border-color: var(--gold); }
+.login-submit {
+  margin-top: 8px;
+  border: 0;
+  background: var(--black);
+  color: var(--off);
+  cursor: pointer;
+  font: 500 13px var(--sans);
+  letter-spacing: .8px;
+  padding: 14px 20px;
+}
+.login-submit:hover { background: var(--graf); }
+.login-troca {
+  margin-top: 22px;
+  border: 0;
+  border-bottom: 1px solid var(--stone);
+  background: transparent;
+  color: var(--stone);
+  cursor: pointer;
+  font: 400 13px var(--sans);
+  padding: 0 0 2px;
+}
+.login-troca:hover { color: var(--black); border-color: var(--black); }
+.login-mensagem {
+  min-height: 20px;
+  color: #9b4037;
+  font-size: 12px;
+  margin-top: 12px;
+}
+.login-sessao {
+  display: none;
+  color: var(--stone);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.login-sessao.visivel { display: block; }
+.login-sair {
+  margin-top: 24px;
+  border: 1px solid rgba(119,115,108,.3);
+  background: transparent;
+  color: var(--black);
+  cursor: pointer;
+  font: 400 13px var(--sans);
+  padding: 11px 18px;
+}
+@media (max-width: 520px) {
+  .login-painel { padding: 40px 24px 32px; }
+}
 </style>
 </head>
 <body>
@@ -938,7 +1055,7 @@ footer {
     <a href="#para-voce">Para você</a>
   </nav>
   <div class="nav-right">
-    <a class="btn-entrar" href="#">Entrar</a>
+    <a class="btn-entrar" id="loginTrigger" href="#login">Entrar</a>
     <a class="btn-comecar" href="#campo">Começar</a>
   </div>
 </header>
@@ -1395,6 +1512,34 @@ footer {
   </div>
 </footer>
 
+<div class="login-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitulo">
+  <div class="login-painel">
+    <button class="login-fechar" id="loginClose" type="button" aria-label="Fechar">&times;</button>
+    <span class="login-label">Dias K</span>
+    <h2 class="login-titulo" id="loginTitulo">Voltar para sua jornada.</h2>
+    <p class="login-intro" id="loginIntro">Entre para continuar de onde parou.</p>
+
+    <form class="login-form" id="loginForm">
+      <div class="login-campo">
+        <label for="loginEmail">E-mail</label>
+        <input id="loginEmail" name="email" type="email" autocomplete="email" required />
+      </div>
+      <div class="login-campo">
+        <label for="loginSenha">Senha</label>
+        <input id="loginSenha" name="password" type="password" minlength="6" autocomplete="current-password" required />
+      </div>
+      <button class="login-submit" id="loginSubmit" type="submit">Entrar</button>
+    </form>
+    <p class="login-mensagem" id="loginMessage" role="status"></p>
+    <button class="login-troca" id="loginToggle" type="button">Ainda não tenho uma conta</button>
+
+    <div class="login-sessao" id="loginSession">
+      <p>Você está conectado neste dispositivo. Sua jornada continua disponível neste navegador.</p>
+      <button class="login-sair" id="loginLogout" type="button">Sair</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ─── HEADER SCROLL ─── */
 const header = document.getElementById('header');
@@ -1545,6 +1690,104 @@ function typeTextSlow(el, text) {
     }
   }, 16);
 }
+
+/* ─── LOGIN LOCAL ─── */
+const loginModal = document.getElementById('loginModal');
+const loginTrigger = document.getElementById('loginTrigger');
+const loginClose = document.getElementById('loginClose');
+const loginForm = document.getElementById('loginForm');
+const loginToggle = document.getElementById('loginToggle');
+const loginMessage = document.getElementById('loginMessage');
+const loginSubmit = document.getElementById('loginSubmit');
+const loginSession = document.getElementById('loginSession');
+const loginTitulo = document.getElementById('loginTitulo');
+const loginIntro = document.getElementById('loginIntro');
+let modoCadastro = false;
+
+function abrirLogin() {
+  loginModal.classList.add('aberto');
+  loginMessage.textContent = '';
+  document.body.style.overflow = 'hidden';
+  if (localStorage.getItem('diasK.sessao')) mostrarSessao();
+  else mostrarFormulario();
+}
+
+function fecharLogin() {
+  loginModal.classList.remove('aberto');
+  document.body.style.overflow = '';
+}
+
+function mostrarFormulario() {
+  loginForm.style.display = 'grid';
+  loginSession.classList.remove('visivel');
+  loginTitulo.textContent = modoCadastro ? 'Começar sua jornada.' : 'Voltar para sua jornada.';
+  loginIntro.textContent = modoCadastro ? 'Crie seu acesso neste dispositivo.' : 'Entre para continuar de onde parou.';
+  loginSubmit.textContent = modoCadastro ? 'Criar conta' : 'Entrar';
+  loginToggle.textContent = modoCadastro ? 'Já tenho uma conta' : 'Ainda não tenho uma conta';
+}
+
+function mostrarSessao() {
+  loginForm.style.display = 'none';
+  loginSession.classList.add('visivel');
+  loginTitulo.textContent = 'Sua jornada continua.';
+  loginIntro.textContent = '';
+  loginToggle.style.display = 'none';
+}
+
+async function criarHash(valor) {
+  const dados = new TextEncoder().encode(valor);
+  const hash = await crypto.subtle.digest('SHA-256', dados);
+  return Array.from(new Uint8Array(hash)).map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+loginTrigger.addEventListener('click', event => {
+  event.preventDefault();
+  abrirLogin();
+});
+loginClose.addEventListener('click', fecharLogin);
+loginModal.addEventListener('click', event => {
+  if (event.target === loginModal) fecharLogin();
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && loginModal.classList.contains('aberto')) fecharLogin();
+});
+loginToggle.addEventListener('click', () => {
+  modoCadastro = !modoCadastro;
+  loginMessage.textContent = '';
+  mostrarFormulario();
+});
+loginForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const senha = document.getElementById('loginSenha').value;
+  const contaSalva = JSON.parse(localStorage.getItem('diasK.conta') || 'null');
+  loginSubmit.disabled = true;
+  loginMessage.textContent = '';
+
+  try {
+    const senhaHash = await criarHash(senha);
+    if (modoCadastro) {
+      localStorage.setItem('diasK.conta', JSON.stringify({ email, senhaHash }));
+      localStorage.setItem('diasK.sessao', email);
+      mostrarSessao();
+    } else if (contaSalva && contaSalva.email === email && contaSalva.senhaHash === senhaHash) {
+      localStorage.setItem('diasK.sessao', email);
+      mostrarSessao();
+    } else {
+      loginMessage.textContent = 'E-mail ou senha não conferem.';
+    }
+  } catch {
+    loginMessage.textContent = 'Não foi possível concluir agora. Tente novamente.';
+  } finally {
+    loginSubmit.disabled = false;
+  }
+});
+document.getElementById('loginLogout').addEventListener('click', () => {
+  localStorage.removeItem('diasK.sessao');
+  modoCadastro = false;
+  loginToggle.style.display = '';
+  mostrarFormulario();
+});
 </script>
 </body>
 </html>
