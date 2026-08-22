@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DIAS K — Entender primeiro. Construir depois.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --off:    #F5F2EC;
+  --black:  #111111;
+  --graf:   #252525;
+  --stone:  #77736C;
+  --gold:   #B69A63;
+  --white:  #FFFFFF;
+  --serif:  'Playfair Display', Georgia, serif;
+  --sans:   'DM Sans', system-ui, sans-serif;
+  --ease:   cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--off);
+  color: var(--black);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── HEADER ─── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 28px 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background .4s var(--ease), border-color .4s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+header.scrolled {
+  background: rgba(245,242,236,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(119,115,108,.15);
+}
+.logo {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+}
+nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+nav a {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .4px;
+  color: var(--stone);
+  text-decoration: none;
+  transition: color .2s;
+}
+nav a:hover { color: var(--black); }
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.btn-entrar {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--stone);
+  text-decoration: none;
+  letter-spacing: .4px;
+  transition: color .2s;
+}
+.btn-entrar:hover { color: var(--black); }
+.btn-comecar {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .8px;
+  color: var(--off);
+  background: var(--black);
+  border: none;
+  padding: 11px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+.btn-comecar:hover { background: var(--graf); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 160px 72px 120px 56px;
+}
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 48px;
+}
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(38px, 4.2vw, 62px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -.5px;
+  color: var(--black);
+  margin-bottom: 32px;
+}
+.hero-h1 em {
+  font-style: italic;
+  font-weight: 400;
+}
+.hero-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--stone);
+  max-width: 420px;
+  line-height: 1.75;
+  margin-bottom: 52px;
+}
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+.btn-primary {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .6px;
+  color: var(--off);
+  background: var(--black);
+  border: none;
+  padding: 16px 36px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background .2s;
+}
+.btn-primary:hover { background: var(--graf); }
+.btn-secondary {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--stone);
+  text-decoration: none;
+  letter-spacing: .3px;
+  border-bottom: 1px solid transparent;
+  transition: color .2s, border-color .2s;
+  padding-bottom: 1px;
+}
+.btn-secondary:hover { color: var(--black); border-color: var(--black); }
+.hero-trust {
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(119,115,108,.2);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--stone);
+  letter-spacing: .3px;
+  line-height: 1.8;
+}
+.hero-right {
+  position: relative;
+  overflow: hidden;
+  background: var(--graf);
+}
+.hero-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .75;
+  display: block;
+}
+/* SVG illustration placeholder for hero (editorial, compositional) */
+.hero-illustration {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ─── DIVIDER ─── */
+.gold-line {
+  height: 1px;
+  background: var(--gold);
+  width: 64px;
+  margin: 0 auto;
+  opacity: .6;
+}
+
+/* ─── SECTION BASE ─── */
+.sec {
+  padding: 120px 56px;
+}
+.sec-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+.sec-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+  display: block;
+}
+
+/* ─── SEC 2: ANTES DE RESOLVER ─── */
+.sec-entender {
+  background: var(--black);
+  color: var(--off);
+}
+.sec-entender .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.8vw, 54px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.4px;
+  margin-bottom: 28px;
+  color: var(--off);
+}
+.sec-entender .sec-body {
+  font-size: 17px;
+  font-weight: 300;
+  color: rgba(245,242,236,.6);
+  max-width: 600px;
+  line-height: 1.8;
+  margin-bottom: 72px;
+}
+.jornada {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  row-gap: 24px;
+}
+.jornada-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.jornada-palavra {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--off);
+  opacity: .5;
+}
+.jornada-palavra.ativo { opacity: 1; color: var(--gold); }
+.jornada-seta {
+  width: 80px;
+  height: 1px;
+  background: rgba(245,242,236,.15);
+  position: relative;
+  margin: 0 8px;
+  align-self: center;
+}
+.jornada-seta::after {
+  content: '';
+  position: absolute;
+  right: 0; top: -3px;
+  border: 3.5px solid transparent;
+  border-left-color: rgba(245,242,236,.15);
+  border-right: none;
+}
+
+/* ─── SEC 3: VOCÊ NÃO PRECISA SABER ─── */
+.sec-voce {
+  background: var(--off);
+}
+.sec-voce .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.3px;
+  margin-bottom: 16px;
+  color: var(--black);
+}
+.sec-voce .sec-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--stone);
+  margin-bottom: 64px;
+}
+.frases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid rgba(119,115,108,.2);
+}
+.frase-item {
+  padding: 36px 0 36px 0;
+  border-bottom: 1px solid rgba(119,115,108,.2);
+}
+.frase-item:nth-child(odd) { padding-right: 64px; border-right: 1px solid rgba(119,115,108,.2); }
+.frase-item:nth-child(even) { padding-left: 64px; }
+.frase-aspas {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--stone);
+  line-height: 1.7;
+}
+
+/* ─── SEC 4: CAMPO PRINCIPAL ─── */
+.sec-campo {
+  background: var(--off);
+  padding: 100px 56px 140px;
+  border-top: 1px solid rgba(119,115,108,.12);
+}
+.campo-center {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+.campo-titulo {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 42px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--black);
+  margin-bottom: 12px;
+  letter-spacing: -.2px;
+}
+.campo-subtitulo {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--stone);
+  margin-bottom: 56px;
+  letter-spacing: .3px;
+}
+.campo-wrapper {
+  position: relative;
+  border-bottom: 1.5px solid var(--black);
+  margin-bottom: 32px;
+}
+.campo-wrapper::before {
+  content: '';
+  position: absolute;
+  bottom: -1.5px; left: 0;
+  height: 1.5px;
+  width: 0;
+  background: var(--gold);
+  transition: width .6s var(--ease);
+}
+.campo-wrapper:focus-within::before { width: 100%; }
+.campo-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--serif);
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 400;
+  color: var(--black);
+  padding: 12px 0 20px;
+  line-height: 1.5;
+  resize: none;
+  min-height: 90px;
+  font-style: italic;
+}
+.campo-input::placeholder {
+  color: rgba(119,115,108,.4);
+  font-style: italic;
+}
+.campo-cta {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--off);
+  background: var(--black);
+  border: none;
+  padding: 15px 40px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.campo-cta:hover { background: var(--graf); }
+.campo-cta:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ─── RESPOSTA IA ─── */
+.ia-resposta {
+  margin-top: 56px;
+  text-align: left;
+  background: var(--white);
+  border: 1px solid rgba(119,115,108,.15);
+  padding: 40px 48px;
+  display: none;
+}
+.ia-resposta.visivel { display: block; }
+.ia-quem {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.ia-texto {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--black);
+  white-space: pre-wrap;
+}
+.ia-carregando {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ia-dots span {
+  display: inline-block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--stone);
+  animation: dot-pulse .9s infinite;
+}
+.ia-dots span:nth-child(2){animation-delay:.2s}
+.ia-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot-pulse{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+/* ─── SEC 5: COMO FUNCIONA ─── */
+.sec-como {
+  background: var(--graf);
+  color: var(--off);
+}
+.sec-como .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -.3px;
+  margin-bottom: 16px;
+  color: var(--off);
+}
+.sec-como .sec-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(245,242,236,.5);
+  margin-bottom: 88px;
+}
+.etapas {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(245,242,236,.1);
+}
+.etapa {
+  padding: 52px 32px 52px 0;
+  border-right: 1px solid rgba(245,242,236,.08);
+  position: relative;
+}
+.etapa:last-child { border-right: none; padding-right: 0; }
+.etapa-num {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  margin-bottom: 28px;
+  display: block;
+}
+.etapa-nome {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--off);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+.etapa-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(245,242,236,.45);
+  line-height: 1.75;
+}
+
+/* ─── SEC 6: DIAGNÓSTICO DIFERENCIAL ─── */
+.sec-diag {
+  background: var(--off);
+  border-top: 1px solid rgba(119,115,108,.12);
+}
+.sec-diag .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.2vw, 46px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.3px;
+  color: var(--black);
+  max-width: 640px;
+  margin-bottom: 80px;
+}
+.diag-par {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+  gap: 40px;
+  padding: 56px 0;
+  border-bottom: 1px solid rgba(119,115,108,.15);
+}
+.diag-par:first-of-type { border-top: 1px solid rgba(119,115,108,.15); }
+.diag-lado { }
+.diag-quem {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.diag-quem.pessoa { color: var(--stone); }
+.diag-quem.diask { color: var(--gold); }
+.diag-fala {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--black);
+}
+.diag-fala.diask-fala { color: var(--graf); }
+.diag-seta-svg { text-align: center; opacity: .3; }
+
+/* ─── SEC 7: PROBLEMAS QUE A PESSOA RECONHECE ─── */
+.sec-reconhece {
+  background: var(--black);
+  color: var(--off);
+}
+.sec-reconhece .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.3px;
+  color: var(--off);
+  margin-bottom: 72px;
+}
+.problemas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.problema-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 32px 0;
+  border-bottom: 1px solid rgba(245,242,236,.08);
+  cursor: default;
+  transition: border-color .2s;
+}
+.problema-item:first-child { border-top: 1px solid rgba(245,242,236,.08); }
+.problema-item:hover { border-color: rgba(182,154,99,.3); }
+.problema-texto {
+  font-family: var(--serif);
+  font-size: clamp(17px, 2vw, 22px);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(245,242,236,.55);
+  transition: color .2s;
+  max-width: 680px;
+}
+.problema-item:hover .problema-texto { color: var(--off); }
+.problema-link {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity .2s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.problema-item:hover .problema-link { opacity: 1; }
+
+/* ─── SEC 8: CONFIANÇA ─── */
+.sec-confianca {
+  background: var(--off);
+  border-top: 1px solid rgba(119,115,108,.12);
+}
+.sec-confianca .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.2vw, 46px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.3px;
+  color: var(--black);
+  margin-bottom: 20px;
+  max-width: 560px;
+}
+.sec-confianca .sec-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--stone);
+  max-width: 500px;
+  line-height: 1.8;
+  margin-bottom: 64px;
+}
+.confianca-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.confianca-link {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .4px;
+  color: var(--black);
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 1px solid rgba(119,115,108,.3);
+  transition: border-color .2s, color .2s;
+}
+.confianca-link:hover { border-color: var(--black); }
+
+/* ─── SEC 9: O QUE NUNCA FAREMOS ─── */
+.sec-nunca {
+  background: var(--off);
+  padding-top: 0;
+}
+.nunca-box {
+  max-width: 1140px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(119,115,108,.12);
+  padding-top: 80px;
+}
+.nunca-h3 {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--stone);
+  letter-spacing: .3px;
+  margin-bottom: 40px;
+}
+.nunca-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.nunca-item {
+  padding: 28px 40px 28px 0;
+  border-right: 1px solid rgba(119,115,108,.15);
+  border-bottom: 1px solid rgba(119,115,108,.15);
+}
+.nunca-item:nth-child(3n) { border-right: none; padding-right: 0; }
+.nunca-item:nth-last-child(-n+3) { border-bottom: none; }
+.nunca-ponto {
+  display: block;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-bottom: 16px;
+  opacity: .7;
+}
+.nunca-texto {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--stone);
+  line-height: 1.7;
+}
+
+/* ─── SEC 10: JORNADA DEMONSTRATIVA ─── */
+.sec-jornada {
+  background: var(--graf);
+  color: var(--off);
+}
+.sec-jornada .sec-h2 {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -.3px;
+  color: var(--off);
+  margin-bottom: 72px;
+}
+.conversa {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.msg-linha {
+  padding: 28px 0;
+  border-bottom: 1px solid rgba(245,242,236,.07);
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 32px;
+}
+.msg-linha:first-child { border-top: 1px solid rgba(245,242,236,.07); }
+.msg-de {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding-top: 3px;
+  white-space: nowrap;
+}
+.msg-de.pessoa { color: rgba(245,242,236,.35); }
+.msg-de.diask { color: var(--gold); }
+.msg-conteudo {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(245,242,236,.75);
+  line-height: 1.7;
+}
+.msg-conteudo.diask { color: var(--off); }
+.diag-resultado {
+  margin-top: 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.diag-col h4 {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+.diag-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.diag-col li {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(245,242,236,.5);
+  padding-left: 16px;
+  position: relative;
+}
+.diag-col li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 9px;
+  width: 4px; height: 1px;
+  background: var(--gold);
+  opacity: .6;
+}
+.jornada-aviso {
+  margin-top: 32px;
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(245,242,236,.25);
+  letter-spacing: .3px;
+}
+
+/* ─── CTA FINAL ─── */
+.sec-cta-final {
+  background: var(--off);
+  padding: 160px 56px;
+  text-align: center;
+}
+.cta-final-inner { max-width: 640px; margin: 0 auto; }
+.cta-gold-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  margin: 0 auto 64px;
+  opacity: .5;
+}
+.cta-final-h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -.5px;
+  color: var(--black);
+  margin-bottom: 24px;
+}
+.cta-final-body {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--stone);
+  margin-bottom: 52px;
+  line-height: 1.75;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--black);
+  color: var(--off);
+  padding: 72px 56px 48px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 72px;
+  border-bottom: 1px solid rgba(245,242,236,.08);
+  margin-bottom: 40px;
+}
+.footer-logo {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--off);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 16px;
+}
+.footer-tagline {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(245,242,236,.35);
+  line-height: 1.6;
+}
+.footer-col-title {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(245,242,236,.3);
+  margin-bottom: 24px;
+  display: block;
+}
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.footer-col a {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(245,242,236,.5);
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-col a:hover { color: var(--off); }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-copy {
+  font-size: 12px;
+  font-weight: 300;
+  color: rgba(245,242,236,.25);
+  letter-spacing: .3px;
+}
+
+/* ─── REVEAL ANIMATION ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── MOBILE ─── */
+@media (max-width: 900px) {
+  header { padding: 22px 24px; }
+  nav { display: none; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 140px 24px 80px; }
+  .hero-right { min-height: 60vw; }
+  .sec { padding: 80px 24px; }
+  .sec-campo { padding: 80px 24px 100px; }
+  .etapas { grid-template-columns: 1fr 1fr; }
+  .etapa { border-right: none; border-bottom: 1px solid rgba(245,242,236,.08); padding: 40px 0; }
+  .etapa:last-child { border-bottom: none; }
+  .frases-grid { grid-template-columns: 1fr; }
+  .frase-item:nth-child(odd) { padding-right: 0; border-right: none; }
+  .frase-item:nth-child(even) { padding-left: 0; }
+  .diag-par { grid-template-columns: 1fr; gap: 24px; }
+  .diag-seta-svg { display: none; }
+  .nunca-grid { grid-template-columns: 1fr; }
+  .nunca-item { border-right: none; padding-right: 0; }
+  .nunca-item:nth-last-child(-n+3) { border-bottom: 1px solid rgba(119,115,108,.15); }
+  .nunca-item:last-child { border-bottom: none; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .diag-resultado { grid-template-columns: 1fr; }
+  .sec-cta-final { padding: 100px 24px; }
+  footer { padding: 64px 24px 40px; }
+  .ia-resposta { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a class="logo" href="#">DIAS K</a>
+  <nav>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#abordagem">Nossa abordagem</a>
+    <a href="#confianca">Segurança</a>
+    <a href="#para-voce">Para você</a>
+  </nav>
+  <div class="nav-right">
+    <a class="btn-entrar" href="#">Entrar</a>
+    <a class="btn-comecar" href="#campo">Começar</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="hero-eyebrow">Dias K</span>
+    <h1 class="hero-h1">Sua vida não precisa<br />continuar no<br /><em>improviso.</em></h1>
+    <p class="hero-sub">Conte o que está acontecendo. A Dias K começa entendendo o problema antes de sugerir qualquer caminho.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#campo">Começar minha jornada</a>
+      <a class="btn-secondary" href="#como-funciona">Entender como funciona</a>
+    </div>
+    <p class="hero-trust">Sem promessas fáceis. Sem respostas prontas.<br />Primeiro, entendemos você.</p>
+  </div>
+  <div class="hero-right">
+    <!-- Ilustração editorial cinematográfica — pessoa em momento reflexivo -->
+    <svg class="hero-illustration" viewBox="0 0 680 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1C1C1C"/>
+          <stop offset="100%" stop-color="#0D0D0D"/>
+        </linearGradient>
+        <linearGradient id="luz-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#E8D9B8" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#E8D9B8" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="piso-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2A2520"/>
+          <stop offset="100%" stop-color="#1A1714"/>
+        </linearGradient>
+        <clipPath id="cp1"><rect width="680" height="900"/></clipPath>
+      </defs>
+      <g clip-path="url(#cp1)">
+        <!-- Fundo do cômodo -->
+        <rect width="680" height="900" fill="url(#bg-grad)"/>
+        <!-- Piso -->
+        <rect x="0" y="660" width="680" height="240" fill="url(#piso-grad)" opacity=".8"/>
+        <!-- Parede textura -->
+        <rect x="0" y="0" width="680" height="670" fill="#181614" opacity=".6"/>
+
+        <!-- Janela — fonte de luz natural -->
+        <rect x="380" y="60" width="220" height="440" fill="#1a160f" rx="2"/>
+        <rect x="384" y="64" width="212" height="432" fill="#0d0a07" rx="1"/>
+        <!-- Luz entrando pela janela — raios suaves -->
+        <polygon points="384,64 596,64 680,180 680,560 596,496 384,496" fill="url(#luz-grad)" opacity="1"/>
+        <!-- Divisor horizontal janela -->
+        <rect x="380" y="276" width="220" height="2" fill="#2a2218" opacity=".8"/>
+        <!-- Divisor vertical janela -->
+        <rect x="489" y="60" width="2" height="444" fill="#2a2218" opacity=".8"/>
+        <!-- Reflexo externo – cidade ao fundo, muito sutil -->
+        <rect x="384" y="65" width="210" height="208" fill="#120F0A" opacity=".7"/>
+        <rect x="384" y="279" width="210" height="213" fill="#100D09" opacity=".7"/>
+        <!-- Luz do exterior difusa -->
+        <ellipse cx="490" cy="180" rx="120" ry="90" fill="#C9A96E" opacity=".04"/>
+
+        <!-- Mesa de janela / peitoril -->
+        <rect x="370" y="494" width="240" height="12" fill="#2D2721" rx="1"/>
+
+        <!-- Objeto sobre a mesa: copo de água ou chá — elemento de quietude -->
+        <rect x="456" y="460" width="20" height="34" fill="#1E1C18" rx="2" opacity=".9"/>
+        <rect x="457" y="462" width="18" height="4" fill="#B69A63" opacity=".12"/>
+        <ellipse cx="466" cy="461" rx="10" ry="3" fill="#2A2620" opacity=".7"/>
+
+        <!-- Cadeira / pessoa sentada vista de costas — silhueta editorial -->
+        <!-- Cadeira -->
+        <rect x="190" y="580" width="160" height="8" fill="#2E2923" rx="1"/>
+        <rect x="200" y="588" width="8" height="80" fill="#2A2520" rx="1"/>
+        <rect x="332" y="588" width="8" height="80" fill="#2A2520" rx="1"/>
+        <rect x="218" y="588" width="104" height="60" fill="#302B25" rx="1" opacity=".9"/>
+
+        <!-- Encosto da cadeira -->
+        <rect x="190" y="520" width="160" height="60" fill="#2A2520" rx="2" opacity=".9"/>
+        <rect x="196" y="526" width="148" height="48" fill="#252019" rx="1" opacity=".8"/>
+
+        <!-- Silhueta da pessoa — vista de costas, olhando janela -->
+        <!-- Tronco -->
+        <path d="M250 520 Q270 380 290 310 Q310 380 330 520 Z" fill="#1A1714" opacity=".95"/>
+        <!-- Ombros -->
+        <path d="M238 430 Q270 415 302 430 Q310 445 302 450 Q270 440 238 450 Q230 445 238 430Z" fill="#1A1714" opacity=".9"/>
+        <!-- Pescoço -->
+        <rect x="282" y="290" width="16" height="30" fill="#1A1714" opacity=".9" rx="3"/>
+        <!-- Cabeça — vista de costas, levemente inclinada -->
+        <ellipse cx="290" cy="268" rx="34" ry="38" fill="#1D1A16" opacity=".95"/>
+        <!-- Cabelo -->
+        <ellipse cx="290" cy="250" rx="34" ry="22" fill="#131109" opacity=".9"/>
+        <!-- Mão esquerda pousada no peitoril -->
+        <path d="M238 520 Q220 510 215 505 Q210 500 218 498 Q228 502 240 510 Z" fill="#1D1A16" opacity=".85"/>
+
+        <!-- Luz natural tocando levemente o ombro esquerdo -->
+        <ellipse cx="240" cy="440" rx="28" ry="40" fill="#C9A96E" opacity=".04" transform="rotate(-10 240 440)"/>
+
+        <!-- Sombra no chão -->
+        <ellipse cx="290" cy="668" rx="90" ry="16" fill="#0D0B08" opacity=".6"/>
+
+        <!-- Estante ao fundo, muito sutil -->
+        <rect x="20" y="180" width="120" height="400" fill="#161310" opacity=".7" rx="1"/>
+        <rect x="22" y="200" width="116" height="4" fill="#1E1B16" opacity=".6"/>
+        <rect x="22" y="260" width="116" height="4" fill="#1E1B16" opacity=".6"/>
+        <rect x="22" y="320" width="116" height="4" fill="#1E1B16" opacity=".6"/>
+        <rect x="22" y="380" width="116" height="4" fill="#1E1B16" opacity=".6"/>
+        <!-- Livros na estante -->
+        <rect x="26" y="206" width="18" height="50" fill="#1A2835" opacity=".8"/>
+        <rect x="46" y="206" width="12" height="50" fill="#2A1A10" opacity=".8"/>
+        <rect x="60" y="210" width="22" height="46" fill="#1A2218" opacity=".8"/>
+        <rect x="84" y="206" width="14" height="50" fill="#22181A" opacity=".8"/>
+        <rect x="26" y="266" width="30" height="50" fill="#1E2228" opacity=".7"/>
+        <rect x="58" y="268" width="16" height="48" fill="#28201A" opacity=".7"/>
+        <rect x="76" y="266" width="22" height="50" fill="#1A2018" opacity=".7"/>
+
+        <!-- Marca DIAS K — watermark sutil no canto -->
+        <text x="32" y="856" font-family="'DM Sans', sans-serif" font-size="11" letter-spacing="3.5" fill="#B69A63" opacity=".2" font-weight="500">DIAS K</text>
+
+        <!-- Vinheta geral -->
+        <radialGradient id="vineta" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="transparent"/>
+          <stop offset="100%" stop-color="#000" stop-opacity=".55"/>
+        </radialGradient>
+        <rect width="680" height="900" fill="url(#vineta)"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- SEC 2: ANTES DE RESOLVER -->
+<section class="sec sec-entender" id="abordagem">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Abordagem</span>
+    <h2 class="sec-h2 reveal">Antes de resolver,<br />precisamos entender.</h2>
+    <p class="sec-body reveal">Uma pessoa pode dizer que precisa economizar dinheiro quando, na verdade, o problema está na falta de organização, no excesso de trabalho, na rotina ou na ausência de um plano que faça sentido para sua realidade.</p>
+    <div class="jornada reveal">
+      <div class="jornada-item">
+        <span class="jornada-palavra">Problema</span>
+      </div>
+      <div class="jornada-seta"></div>
+      <div class="jornada-item">
+        <span class="jornada-palavra">Contexto</span>
+      </div>
+      <div class="jornada-seta"></div>
+      <div class="jornada-item">
+        <span class="jornada-palavra ativo">Entendimento</span>
+      </div>
+      <div class="jornada-seta"></div>
+      <div class="jornada-item">
+        <span class="jornada-palavra">Estratégia</span>
+      </div>
+      <div class="jornada-seta"></div>
+      <div class="jornada-item">
+        <span class="jornada-palavra">Evolução</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 3: VOCÊ NÃO PRECISA SABER -->
+<section class="sec sec-voce" id="para-voce">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Para você</span>
+    <h2 class="sec-voce sec-h2 reveal">Você não precisa<br />chegar com a resposta.</h2>
+    <p class="sec-voce sec-body reveal">Você pode chegar apenas com um problema.</p>
+    <div class="frases-grid reveal">
+      <div class="frase-item">
+        <p class="frase-aspas">"Eu trabalho demais."</p>
+      </div>
+      <div class="frase-item">
+        <p class="frase-aspas">"Nunca consigo guardar dinheiro."</p>
+      </div>
+      <div class="frase-item">
+        <p class="frase-aspas">"Não tenho tempo para a minha família."</p>
+      </div>
+      <div class="frase-item">
+        <p class="frase-aspas">"Quero mudar, mas não sei por onde começar."</p>
+      </div>
+      <div class="frase-item">
+        <p class="frase-aspas">"Eu começo e nunca consigo manter."</p>
+      </div>
+      <div class="frase-item">
+        <p class="frase-aspas">"Ganho, mas não consigo construir nada."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 4: CAMPO PRINCIPAL — IA ao vivo -->
+<section class="sec-campo" id="campo">
+  <div class="campo-center">
+    <h2 class="campo-titulo reveal">O que está acontecendo?</h2>
+    <p class="campo-subtitulo reveal">Conte para a Dias K, com suas palavras.</p>
+    <div class="campo-wrapper reveal">
+      <textarea class="campo-input" id="campoInput" rows="3" placeholder="Eu trabalho o dia inteiro e…"></textarea>
+    </div>
+    <button class="campo-cta reveal" id="campoCta" onclick="iniciarConversa()">Começar conversa</button>
+
+    <div class="ia-resposta" id="iaResposta">
+      <div class="ia-quem">Dias K</div>
+      <div class="ia-texto" id="iaTexto">
+        <div class="ia-carregando">
+          <div class="ia-dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 5: COMO FUNCIONA -->
+<section class="sec sec-como" id="como-funciona">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Como funciona</span>
+    <h2 class="sec-h2 reveal">Não entregamos<br />uma resposta pronta.</h2>
+    <p class="sec-body reveal">Construímos um caminho a partir da sua realidade.</p>
+    <div class="etapas reveal">
+      <div class="etapa">
+        <span class="etapa-num">01</span>
+        <div class="etapa-nome">Escutar</div>
+        <p class="etapa-desc">Entender o que está acontecendo, nas suas palavras, sem julgamento.</p>
+      </div>
+      <div class="etapa" style="padding-left:32px;">
+        <span class="etapa-num">02</span>
+        <div class="etapa-nome">Investigar</div>
+        <p class="etapa-desc">Descobrir o que está por trás do problema. O sintoma raramente é a causa.</p>
+      </div>
+      <div class="etapa" style="padding-left:32px;">
+        <span class="etapa-num">03</span>
+        <div class="etapa-nome">Diagnosticar</div>
+        <p class="etapa-desc">Organizar as causas e prioridades de forma clara e honesta.</p>
+      </div>
+      <div class="etapa" style="padding-left:32px;">
+        <span class="etapa-num">04</span>
+        <div class="etapa-nome">Construir</div>
+        <p class="etapa-desc">Criar uma estratégia possível para aquela pessoa, naquele momento.</p>
+      </div>
+      <div class="etapa" style="padding-left:32px;">
+        <span class="etapa-num">05</span>
+        <div class="etapa-nome">Acompanhar</div>
+        <p class="etapa-desc">Adaptar o caminho conforme a vida real acontece. Sem rigidez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 6: DIAGNÓSTICO DIFERENCIAL -->
+<section class="sec sec-diag">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Diagnóstico</span>
+    <h2 class="sec-diag sec-h2 reveal">O problema que você conta pode não ser o problema que precisa ser resolvido.</h2>
+    <div class="diag-par reveal">
+      <div class="diag-lado">
+        <div class="diag-quem pessoa">A pessoa diz</div>
+        <p class="diag-fala">"Eu preciso economizar dinheiro."</p>
+      </div>
+      <div class="diag-seta-svg">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 16 H24 M18 10 L24 16 L18 22" stroke="#B69A63" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="diag-lado">
+        <div class="diag-quem diask">Dias K investiga</div>
+        <p class="diag-fala diask-fala">"Vamos descobrir primeiro por que você não consegue."</p>
+      </div>
+    </div>
+    <div class="diag-par reveal">
+      <div class="diag-lado">
+        <div class="diag-quem pessoa">A pessoa diz</div>
+        <p class="diag-fala">"Eu não tenho tempo para nada."</p>
+      </div>
+      <div class="diag-seta-svg">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 16 H24 M18 10 L24 16 L18 22" stroke="#B69A63" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="diag-lado">
+        <div class="diag-quem diask">Dias K investiga</div>
+        <p class="diag-fala diask-fala">"Vamos entender o que está consumindo o seu tempo de verdade."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 7: PROBLEMAS QUE A PESSOA RECONHECE -->
+<section class="sec sec-reconhece">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Você se reconhece?</span>
+    <h2 class="sec-reconhece sec-h2 reveal">Isso descreve<br />alguma parte da sua vida?</h2>
+    <div class="problemas-list reveal">
+      <div class="problema-item">
+        <p class="problema-texto">"Você trabalha muito, mas sente que não está avançando?"</p>
+        <a class="problema-link" href="#campo">Conte para a Dias K →</a>
+      </div>
+      <div class="problema-item">
+        <p class="problema-texto">"Você ganha dinheiro, mas não consegue construir nada?"</p>
+        <a class="problema-link" href="#campo">Conte para a Dias K →</a>
+      </div>
+      <div class="problema-item">
+        <p class="problema-texto">"Você sabe o que deveria fazer, mas não consegue manter?"</p>
+        <a class="problema-link" href="#campo">Conte para a Dias K →</a>
+      </div>
+      <div class="problema-item">
+        <p class="problema-texto">"Você tem objetivos, mas sua rotina nunca deixa você chegar neles?"</p>
+        <a class="problema-link" href="#campo">Conte para a Dias K →</a>
+      </div>
+      <div class="problema-item">
+        <p class="problema-texto">"Você está cansado, mas não consegue parar?"</p>
+        <a class="problema-link" href="#campo">Conte para a Dias K →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 8: CONFIANÇA -->
+<section class="sec sec-confianca" id="confianca">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Confiança</span>
+    <h2 class="sec-confianca sec-h2 reveal">Confiança não se pede.<br />Se constrói.</h2>
+    <p class="sec-confianca sec-body reveal">Antes de confiar em uma tecnologia com uma parte da sua vida, você precisa saber quem está por trás dela, como ela funciona e quais são os seus limites.</p>
+    <div class="confianca-links reveal">
+      <a class="confianca-link" href="#">Quem somos</a>
+      <a class="confianca-link" href="#">Como funciona</a>
+      <a class="confianca-link" href="#">Como usamos IA</a>
+      <a class="confianca-link" href="#">Privacidade</a>
+      <a class="confianca-link" href="#">Segurança</a>
+      <a class="confianca-link" href="#">Transparência</a>
+      <a class="confianca-link" href="#">Termos</a>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 9: O QUE NUNCA FAREMOS -->
+<section class="sec sec-nunca">
+  <div class="nunca-box">
+    <h3 class="nunca-h3 reveal">O que a Dias K nunca fará.</h3>
+    <div class="nunca-grid reveal">
+      <div class="nunca-item">
+        <span class="nunca-ponto"></span>
+        <p class="nunca-texto">Prometer dinheiro fácil ou resultados garantidos.</p>
+      </div>
+      <div class="nunca-item">
+        <span class="nunca-ponto"></span>
+        <p class="nunca-texto">Inventar informações ou fingir certeza quando não houver.</p>
+      </div>
+      <div class="nunca-item">
+        <span class="nunca-ponto"></span>
+        <p class="nunca-texto">Esconder as nossas limitações de você.</p>
+      </div>
+      <div class="nunca-item">
+        <span class="nunca-ponto"></span>
+        <p class="nunca-texto">Pressionar ou criar urgência artificial.</p>
+      </div>
+      <div class="nunca-item">
+        <span class="nunca-ponto"></span>
+        <p class="nunca-texto">Vender uma solução antes de entender o problema.</p>
+      </div>
+      <div class="nunca-item">
+        <span class="nunca-ponto"></span>
+        <p class="nunca-texto">Tratar você como um dado. Você é uma pessoa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 10: JORNADA DEMONSTRATIVA -->
+<section class="sec sec-jornada">
+  <div class="sec-inner">
+    <span class="sec-label reveal">Exemplo de jornada</span>
+    <h2 class="sec-jornada sec-h2 reveal">Veja o que acontece<br />quando você começa.</h2>
+    <div class="conversa reveal">
+      <div class="msg-linha">
+        <span class="msg-de pessoa">Pessoa</span>
+        <p class="msg-conteudo">"Eu trabalho muito e nunca consigo juntar dinheiro."</p>
+      </div>
+      <div class="msg-linha">
+        <span class="msg-de diask">Dias K</span>
+        <p class="msg-conteudo diask">"Vamos entender. Além do dinheiro, como está o seu tempo?"</p>
+      </div>
+      <div class="msg-linha">
+        <span class="msg-de pessoa">Pessoa</span>
+        <p class="msg-conteudo">"Quase não vejo minha família."</p>
+      </div>
+      <div class="msg-linha">
+        <span class="msg-de diask">Dias K</span>
+        <p class="msg-conteudo diask">"Então vamos olhar para os dois problemas juntos. Um costuma alimentar o outro."</p>
+      </div>
+    </div>
+    <div class="diag-resultado reveal">
+      <div class="diag-col">
+        <h4>Diagnóstico</h4>
+        <ul>
+          <li>Tempo excessivamente comprometido</li>
+          <li>Baixa margem financeira</li>
+          <li>Ausência de planejamento</li>
+          <li>Família como prioridade não realizada</li>
+        </ul>
+      </div>
+      <div class="diag-col">
+        <h4>Estratégia construída</h4>
+        <ul>
+          <li>Organização financeira pessoal</li>
+          <li>Revisão da rotina semanal</li>
+          <li>Meta mensal realista</li>
+          <li>Tempo reservado para família</li>
+          <li>Acompanhamento contínuo</li>
+        </ul>
+      </div>
+    </div>
+    <p class="jornada-aviso reveal">Este é um exemplo demonstrativo. Não representa um resultado real.</p>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="sec-cta-final">
+  <div class="cta-final-inner">
+    <div class="cta-gold-line reveal"></div>
+    <h2 class="cta-final-h2 reveal">Você não precisa ter<br />tudo resolvido<br />para começar.</h2>
+    <p class="cta-final-body reveal">Comece contando o que está acontecendo.</p>
+    <a class="btn-primary reveal" href="#campo" style="font-size:15px; letter-spacing:1px;">Começar minha jornada</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a class="footer-logo" href="#">DIAS K</a>
+      <p class="footer-tagline">Entender primeiro.<br />Construir depois.</p>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Produto</span>
+      <ul>
+        <li><a href="#">Como funciona</a></li>
+        <li><a href="#">Nossa abordagem</a></li>
+        <li><a href="#">Segurança</a></li>
+        <li><a href="#">Transparência</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Legal</span>
+      <ul>
+        <li><a href="#">Privacidade</a></li>
+        <li><a href="#">Termos</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">Ajuda</span>
+      <ul>
+        <li><a href="#">Contato</a></li>
+        <li><a href="#">Entrar</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Dias K. Todos os direitos reservados.</span>
+    <span class="footer-copy" style="font-style:italic; font-family:'Playfair Display',serif;">Sua vida é complexa. Nós começamos entendendo.</span>
+  </div>
+</footer>
+
+<script>
+/* ─── HEADER SCROLL ─── */
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+/* ─── REVEAL ON SCROLL ─── */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80);
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* ─── CAMPO: auto-grow ─── */
+const campoInput = document.getElementById('campoInput');
+campoInput.addEventListener('input', () => {
+  campoInput.style.height = 'auto';
+  campoInput.style.height = campoInput.scrollHeight + 'px';
+});
+
+/* ─── CONVERSA COM CLAUDE ─── */
+async function iniciarConversa() {
+  const texto = campoInput.value.trim();
+  if (!texto) {
+    campoInput.focus();
+    return;
+  }
+
+  const cta = document.getElementById('campoCta');
+  const resposta = document.getElementById('iaResposta');
+  const iaTexto = document.getElementById('iaTexto');
+
+  cta.disabled = true;
+  cta.textContent = 'Processando…';
+  resposta.classList.add('visivel');
+  iaTexto.innerHTML = '<div class="ia-carregando"><div class="ia-dots"><span></span><span></span><span></span></div></div>';
+  resposta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: `Você é o assistente da Dias K — uma empresa de inteligência e acompanhamento para pessoas comuns que querem compreender e melhorar problemas reais da própria vida.
+
+Princípios que guiam sua resposta:
+- Antes de sugerir qualquer solução, entenda o problema profundamente
+- O problema que a pessoa diz ter pode não ser o problema real
+- Nunca prometa resultados garantidos ou soluções fáceis
+- Fale como uma pessoa inteligente e empática, não como um chatbot ou coach
+- Não use jargões, não use listas de bullets excessivas, não use exclamações
+- Seja humano, próximo e sério ao mesmo tempo
+- Faça no máximo 1 ou 2 perguntas de investigação, não bombardeie a pessoa
+- Tom: calmo, inteligente, sofisticado, confiável, humano
+- Responda sempre em português brasileiro
+- Nunca mencione tecnologia, IA ou sistemas — seja apenas uma presença que escuta
+- Suas respostas devem ser curtas a médias, nunca longas demais
+- Comece reconhecendo o que a pessoa disse, depois aprofunde gentilmente`,
+        messages: [{ role: 'user', content: texto }]
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.map(b => b.text || '').join('') || 'Estou aqui. Pode continuar.';
+
+    iaTexto.textContent = '';
+    typeTextSlow(iaTexto, reply);
+  } catch (err) {
+    iaTexto.textContent = 'Estou aqui. Conte mais um pouco — às vezes a conexão falha, mas a conversa não precisa parar.';
+  }
+
+  cta.disabled = false;
+  cta.textContent = 'Continuar conversa';
+  cta.onclick = continuarConversa;
+}
+
+let historico = [];
+
+async function continuarConversa() {
+  const texto = campoInput.value.trim();
+  if (!texto) { campoInput.focus(); return; }
+
+  const iaTexto = document.getElementById('iaTexto');
+  const cta = document.getElementById('campoCta');
+  const respostaAtual = iaTexto.textContent;
+
+  if (respostaAtual && !historico.length) {
+    historico.push({ role: 'user', content: campoInput.value });
+    historico.push({ role: 'assistant', content: respostaAtual });
+  }
+
+  historico.push({ role: 'user', content: texto });
+  campoInput.value = '';
+  campoInput.style.height = 'auto';
+
+  cta.disabled = true;
+  cta.textContent = 'Processando…';
+  iaTexto.innerHTML = '<div class="ia-carregando"><div class="ia-dots"><span></span><span></span><span></span></div></div>';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: `Você é o assistente da Dias K — uma empresa de inteligência e acompanhamento para pessoas comuns que querem compreender e melhorar problemas reais da própria vida.
+
+Princípios que guiam sua resposta:
+- Antes de sugerir qualquer solução, entenda o problema profundamente
+- O problema que a pessoa diz ter pode não ser o problema real
+- Nunca prometa resultados garantidos ou soluções fáceis
+- Fale como uma pessoa inteligente e empática, não como um chatbot ou coach
+- Não use jargões, não use listas de bullets excessivas, não use exclamações
+- Seja humano, próximo e sério ao mesmo tempo
+- Faça no máximo 1 ou 2 perguntas de investigação, não bombardeie a pessoa
+- Tom: calmo, inteligente, sofisticado, confiável, humano
+- Responda sempre em português brasileiro
+- Nunca mencione tecnologia, IA ou sistemas — seja apenas uma presença que escuta
+- Suas respostas devem ser curtas a médias, nunca longas demais
+- Continue a conversa de forma natural, lembrando o que já foi dito`,
+        messages: historico
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.map(b => b.text || '').join('') || 'Estou aqui. Continue.';
+    historico.push({ role: 'assistant', content: reply });
+    iaTexto.textContent = '';
+    typeTextSlow(iaTexto, reply);
+  } catch {
+    iaTexto.textContent = 'A conexão falhou. Mas pode tentar de novo — estou aqui.';
+  }
+
+  cta.disabled = false;
+  cta.textContent = 'Continuar conversa';
+}
+
+function typeTextSlow(el, text) {
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i < text.length) {
+      el.textContent += text[i++];
+    } else {
+      clearInterval(iv);
+    }
+  }, 16);
+}
+</script>
+</body>
+</html>
