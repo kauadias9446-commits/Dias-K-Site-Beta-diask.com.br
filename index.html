@@ -1426,7 +1426,7 @@ const API_URL = '';
 const historico = [];
 
 async function pedirResposta(messages) {
-  if (!API_URL) throw new Error('Worker ainda não configurado.');
+  if (!API_URL) return respostaLocal(messages);
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1435,6 +1435,23 @@ async function pedirResposta(messages) {
   const data = await response.json();
   if (!response.ok || data.error) throw new Error(data.error || 'Falha na conversa.');
   return data.reply || 'Estou aqui. Pode continuar.';
+}
+
+function respostaLocal(messages) {
+  const totalMensagens = messages.filter(message => message.role === 'user').length;
+  const ultimaMensagem = messages[messages.length - 1].content.toLowerCase();
+
+  if (totalMensagens === 1) {
+    if (ultimaMensagem.includes('dinheiro') || ultimaMensagem.includes('finance')) {
+      return 'Entendi. Quando você diz que o dinheiro não está permitindo construir o que deseja, o que pesa mais hoje: a falta de organização, os gastos inesperados ou a renda que não acompanha suas necessidades?';
+    }
+    if (ultimaMensagem.includes('tempo') || ultimaMensagem.includes('trabalho') || ultimaMensagem.includes('cansad')) {
+      return 'Entendi. Parece que sua rotina está ocupando mais espaço do que deveria. O que hoje consome a maior parte do seu tempo e deixa você sem margem para o que considera importante?';
+    }
+    return 'Entendi. Antes de pensar em uma solução, quero compreender melhor: o que nessa situação mais está afetando sua vida neste momento?';
+  }
+
+  return 'Obrigado por continuar. O que você já tentou fazer para mudar essa situação e o que acabou dificultando manter esse caminho?';
 }
 
 async function iniciarConversa() {
@@ -1462,9 +1479,7 @@ async function iniciarConversa() {
     iaTexto.textContent = '';
     typeTextSlow(iaTexto, reply);
   } catch (err) {
-    iaTexto.textContent = API_URL
-      ? 'Não consegui me conectar agora. Tente novamente em instantes.'
-      : 'A conversa está pronta, mas ainda falta conectar o endereço do atendimento.';
+    iaTexto.textContent = 'Não consegui responder agora. Tente novamente em instantes.';
   }
 
   cta.disabled = false;
