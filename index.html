@@ -1718,6 +1718,13 @@ function respostaLocal(messages) {
   const mencionaTentativa = /tentei|comecei|fiz|ja tentei|nao consegui manter|parei/i.test(semAcentos);
   const mencionaPrazo = /hoje|amanha|semana|mes|ano|urgente|prazo|logo/i.test(semAcentos);
   const mencionaCausa = /porque|causa|motivo|devido|acontece quando|por conta/i.test(semAcentos);
+  const mencionaImpacto = /afeta|impacta|atrapalha|prejudica|perco|sinto|fico|nao consigo|estou/i.test(semAcentos);
+  const mencionaRestricao = /falta de|dificulta|impede|limita|nao tenho|pouco tempo|sem dinheiro|energia/i.test(semAcentos);
+  const respostasAnteriores = messages.filter(message => message.role === 'assistant').map(message => message.content.toLowerCase()).join(' ');
+  const jaPerguntouObjetivo = respostasAnteriores.includes('o que você gostaria') || respostasAnteriores.includes('tornar isso concreto');
+  const jaPerguntouCausa = respostasAnteriores.includes('antes desse problema') || respostasAnteriores.includes('o que normalmente acontece');
+  const jaPerguntouRestricao = respostasAnteriores.includes('o que mais limita');
+  const jaPerguntouTentativa = respostasAnteriores.includes('já tentou alguma mudança');
   const foco = {
     financeiro: 'sua relação com o dinheiro',
     rotina: 'sua rotina e o espaço que o trabalho ocupa',
@@ -1737,23 +1744,26 @@ function respostaLocal(messages) {
     pessoal: 'quantos dias a ação aconteceu, sem exigir perfeição'
   }[assunto];
 
-  if (totalMensagens === 1) {
+  if (totalMensagens === 1 && !mencionaImpacto) {
     return `Entendi. Quero olhar primeiro para ${foco}, sem presumir qual é a solução. Qual é o efeito mais concreto disso na sua vida hoje?`;
   }
-  if (totalMensagens === 2 && !mencionaObjetivo) {
+  if (!mencionaObjetivo && !jaPerguntouObjetivo) {
     return `Isso ajuda a dar forma ao problema. Se essa situação melhorasse nos próximos meses, o que você gostaria de conseguir fazer ou viver de maneira diferente?`;
   }
-  if (totalMensagens === 2 && !mencionaCausa) {
+  if (!mencionaObjetivo && jaPerguntouObjetivo && totalMensagens === 2) {
+    return 'Para tornar isso concreto, pense no resultado que faria você dizer: agora minha vida está melhor. Qual seria esse resultado?';
+  }
+  if (!mencionaCausa && !jaPerguntouCausa && totalMensagens <= 4) {
     return 'Entendi o que você quer mudar. O que normalmente acontece antes desse problema aparecer? Esse momento pode indicar uma causa mais útil do que o sintoma inicial.';
   }
-  if (totalMensagens === 3 && !mencionaTentativa) {
-    return 'Agora temos o impacto e o que você deseja mudar. O que costuma atrapalhar esse movimento: falta de tempo, energia, organização, dinheiro ou algo diferente?';
+  if (!mencionaRestricao && !jaPerguntouRestricao && totalMensagens <= 5) {
+    return 'Agora quero respeitar a sua realidade: o que mais limita uma mudança hoje, tempo, energia, dinheiro, apoio ou outra coisa?';
   }
-  if (totalMensagens <= 4) {
+  if (!mencionaTentativa && !jaPerguntouTentativa && totalMensagens <= 6) {
     return 'Obrigado por detalhar. Você já tentou alguma mudança específica? O que aconteceu quando tentou manter esse caminho?';
   }
 
-  if (totalMensagens === 5) {
+  if (totalMensagens >= 4) {
     const urgencia = mencionaPrazo ? 'Como você mencionou um prazo, vale separar o que precisa ser resolvido agora do que pode ser construído depois. ' : '';
     return `Leitura provisória:\nSintoma: o que apareceu no começo da conversa.\nFoco provável: ${foco}.\nHipótese: o padrão pode estar ligado ao contexto e às restrições que você descreveu, mas ainda não é uma certeza.\n\n${urgencia}Próximo experimento (7 dias): ${proximoPasso}.\nCritério de acompanhamento: ${criterio}.\n\nDepois desse teste, a estratégia deve ser ajustada com base no que realmente aconteceu, não no que parecia funcionar em teoria.`;
   }
