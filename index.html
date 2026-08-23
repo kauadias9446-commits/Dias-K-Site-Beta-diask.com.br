@@ -1617,6 +1617,7 @@ function respostaLocal(messages) {
   const mencionaObjetivo = /quero|preciso|gostaria|pretendo|meta|objetivo|sonho/i.test(semAcentos);
   const mencionaTentativa = /tentei|comecei|fiz|ja tentei|nao consegui manter|parei/i.test(semAcentos);
   const mencionaPrazo = /hoje|amanha|semana|mes|ano|urgente|prazo|logo/i.test(semAcentos);
+  const mencionaCausa = /porque|causa|motivo|devido|acontece quando|por conta/i.test(semAcentos);
   const foco = {
     financeiro: 'sua relação com o dinheiro',
     rotina: 'sua rotina e o espaço que o trabalho ocupa',
@@ -1642,6 +1643,9 @@ function respostaLocal(messages) {
   if (totalMensagens === 2 && !mencionaObjetivo) {
     return `Isso ajuda a dar forma ao problema. Se essa situação melhorasse nos próximos meses, o que você gostaria de conseguir fazer ou viver de maneira diferente?`;
   }
+  if (totalMensagens === 2 && !mencionaCausa) {
+    return 'Entendi o que você quer mudar. O que normalmente acontece antes desse problema aparecer? Esse momento pode indicar uma causa mais útil do que o sintoma inicial.';
+  }
   if (totalMensagens === 3 && !mencionaTentativa) {
     return 'Agora temos o impacto e o que você deseja mudar. O que costuma atrapalhar esse movimento: falta de tempo, energia, organização, dinheiro ou algo diferente?';
   }
@@ -1651,7 +1655,7 @@ function respostaLocal(messages) {
 
   if (totalMensagens === 5) {
     const urgencia = mencionaPrazo ? 'Como você mencionou um prazo, vale separar o que precisa ser resolvido agora do que pode ser construído depois. ' : '';
-    return `Pelo que você contou, o ponto central parece estar em ${foco}, e não apenas no sintoma inicial. ${urgencia}Minha sugestão é um experimento de sete dias: ${proximoPasso}. Ao final, use como critério ${criterio}. Isso não é uma solução definitiva; é uma forma de criar evidência antes de tomar uma decisão maior.`;
+    return `Leitura provisória:\nSintoma: o que apareceu no começo da conversa.\nFoco provável: ${foco}.\nHipótese: o padrão pode estar ligado ao contexto e às restrições que você descreveu, mas ainda não é uma certeza.\n\n${urgencia}Próximo experimento (7 dias): ${proximoPasso}.\nCritério de acompanhamento: ${criterio}.\n\nDepois desse teste, a estratégia deve ser ajustada com base no que realmente aconteceu, não no que parecia funcionar em teoria.`;
   }
 
   return `Com o que você trouxe até aqui, eu manteria o foco em ${foco}. Em vez de aumentar a meta, revise o experimento: o que funcionou, em qual momento você travou e o que precisaria mudar para atender ao critério de ${criterio}? Essa resposta indica o próximo ajuste com mais precisão.`;
