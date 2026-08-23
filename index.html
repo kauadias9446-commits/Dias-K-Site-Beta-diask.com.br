@@ -299,6 +299,71 @@ nav a:hover { color: var(--black); }
   border-right: none;
 }
 
+/* ─── MAPA VISUAL ─── */
+.sec-mapa {
+  background: #ebe7df;
+  border-top: 1px solid rgba(119,115,108,.14);
+}
+.mapa-intro {
+  display: grid;
+  grid-template-columns: minmax(220px, .8fr) 1.2fr;
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+.mapa-titulo {
+  font-family: var(--serif);
+  font-size: clamp(30px, 3.5vw, 50px);
+  font-weight: 400;
+  line-height: 1.12;
+  color: var(--black);
+}
+.mapa-descricao {
+  max-width: 480px;
+  color: var(--stone);
+  font-size: 16px;
+  line-height: 1.8;
+}
+.mapa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.mapa-figura { margin: 0; }
+.mapa-imagem {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  filter: saturate(.72) contrast(.96);
+}
+.mapa-legenda {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(119,115,108,.28);
+  margin-top: 16px;
+}
+.mapa-numero {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+.mapa-passo {
+  color: var(--black);
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+.mapa-texto {
+  color: var(--stone);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
 /* ─── SEC 3: VOCÊ NÃO PRECISA SABER ─── */
 .sec-voce {
   background: var(--off);
@@ -922,6 +987,8 @@ footer {
   .nunca-item:last-child { border-bottom: none; }
   .footer-top { grid-template-columns: 1fr 1fr; }
   .diag-resultado { grid-template-columns: 1fr; }
+  .mapa-intro { grid-template-columns: 1fr; gap: 24px; }
+  .mapa-grid { grid-template-columns: 1fr; gap: 48px; }
   .sec-cta-final { padding: 100px 24px; }
   footer { padding: 64px 24px 40px; }
   .ia-resposta { padding: 28px 24px; }
@@ -1220,6 +1287,39 @@ footer {
       <div class="jornada-item">
         <span class="jornada-palavra">Evolução</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAPA VISUAL: COMO A DIAS K PENSA -->
+<section class="sec sec-mapa" aria-labelledby="mapa-titulo">
+  <div class="sec-inner">
+    <div class="mapa-intro reveal">
+      <h2 class="mapa-titulo" id="mapa-titulo">O caminho fica mais claro quando a gente enxerga o todo.</h2>
+      <p class="mapa-descricao">A Dias K não começa pela ferramenta. Primeiro observa o contexto, depois organiza o que está por trás dele e só então constrói uma ação possível.</p>
+    </div>
+    <div class="mapa-grid">
+      <figure class="mapa-figura reveal">
+        <img class="mapa-imagem" src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=85" alt="Mesa de trabalho com caderno e computador, representando a observação do contexto" loading="lazy" />
+        <figcaption class="mapa-legenda">
+          <span class="mapa-numero">01</span>
+          <div><h3 class="mapa-passo">Observar</h3><p class="mapa-texto">O que está acontecendo de verdade, além da primeira frase?</p></div>
+        </figcaption>
+      </figure>
+      <figure class="mapa-figura reveal">
+        <img class="mapa-imagem" src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=85" alt="Pessoas organizando ideias em uma mesa, representando o diagnóstico" loading="lazy" />
+        <figcaption class="mapa-legenda">
+          <span class="mapa-numero">02</span>
+          <div><h3 class="mapa-passo">Organizar</h3><p class="mapa-texto">Sintomas, causas possíveis, objetivos e restrições ganham nome.</p></div>
+        </figcaption>
+      </figure>
+      <figure class="mapa-figura reveal">
+        <img class="mapa-imagem" src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=85" alt="Equipe conversando em colaboração, representando a construção de um plano" loading="lazy" />
+        <figcaption class="mapa-legenda">
+          <span class="mapa-numero">03</span>
+          <div><h3 class="mapa-passo">Construir</h3><p class="mapa-texto">Uma estratégia pequena, concreta e ajustável começa a sair do papel.</p></div>
+        </figcaption>
+      </figure>
     </div>
   </div>
 </section>
