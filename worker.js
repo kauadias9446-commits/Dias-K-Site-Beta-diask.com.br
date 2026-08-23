@@ -72,7 +72,47 @@ export default {
       });
     }
 
+    let searchContext = "";
+    let sources = [];
+    if (body.webSearch === true) {
+      const googleKey = env.GOOGLE_API_KEY;
+      const googleCx = env.GOOGLE_CX;
+      const query = messages.filter((message) => message.role === "user").at(-1)?.content?.trim();
+      if (!googleKey || !googleCx) {
+        return new Response(JSON.stringify({ error: "Pesquisa web ainda não configurada." }), {
+          status: 503,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!query || query.length > 300) {
+        return new Response(JSON.stringify({ error: "Pergunta inválida para pesquisa." }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const searchUrl = new URL("https://www.googleapis.com/customsearch/v1");
+      searchUrl.searchParams.set("key", googleKey);
+      searchUrl.searchParams.set("cx", googleCx);
+      searchUrl.searchParams.set("q", query);
+      searchUrl.searchParams.set("hl", "pt-BR");
+      searchUrl.searchParams.set("num", "5");
+      const searchResponse = await fetch(searchUrl);
+      if (!searchResponse.ok) {
+        return new Response(JSON.stringify({ error: "Não foi possível pesquisar agora." }), {
+          status: 502,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const searchData = await searchResponse.json();
+      sources = (searchData.items || []).map((item) => ({ title: item.title, url: item.link }));
+      searchContext = sources.map((source, index) => `[Fonte ${index + 1}] ${source.title}\n${source.url}`).join("\n\n");
+    }
+
     try {
+      const aiSystemPrompt = searchContext
+        ? `${SYSTEM_PROMPT}\n\nCONTEXTO DE PESQUISA RECENTE\nUse estas fontes apenas como contexto factual. Não invente fatos além delas, indique quando algo não estiver confirmado e cite as fontes recebidas ao responder:\n\n${searchContext}`
+        : SYSTEM_PROMPT;
       const anthropicResponse = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
@@ -83,7 +123,7 @@ export default {
         body: JSON.stringify({
           model: "claude-sonnet-4-6",
           max_tokens: 700,
-          system: SYSTEM_PROMPT,
+          system: aiSystemPrompt,
           messages,
         }),
       });
@@ -97,7 +137,7 @@ export default {
 
       const data = await anthropicResponse.json();
       const textBlock = (data.content || []).find((block) => block.type === "text");
-      return new Response(JSON.stringify({ reply: textBlock?.text || "" }), {
+      return new Response(JSON.stringify({ reply: textBlock?.text || "", sources }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     } catch {

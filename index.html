@@ -479,6 +479,8 @@ nav a:hover { color: var(--black); }
 }
 .campo-cta:hover { background: var(--graf); }
 .campo-cta:disabled { opacity: .4; cursor: not-allowed; }
+.pesquisa-opcao { display: flex; align-items: center; gap: 8px; color: var(--stone); font-size: 12px; margin: 16px 0 0; text-align: left; }
+.pesquisa-opcao input { accent-color: var(--gold); }
 
 /* ─── RESPOSTA IA ─── */
 .ia-resposta {
@@ -506,6 +508,11 @@ files  font-family: var(--serif);
   color: var(--black);
   white-space: pre-wrap;
 }
+.ia-fontes { display: none; margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(119,115,108,.15); }
+.ia-fontes.visivel { display: block; }
+.ia-fontes-titulo { color: var(--gold); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+.ia-fonte { display: block; color: var(--stone); font-size: 12px; line-height: 1.5; margin-top: 8px; text-decoration: none; }
+.ia-fonte:hover { color: var(--black); }
 .ia-carregando {
   display: flex;
   align-items: center;
@@ -1386,6 +1393,7 @@ footer {
       <textarea class="campo-input" id="campoInput" rows="3" placeholder="Eu trabalho o dia inteiro e…"></textarea>
     </div>
     <button class="campo-cta reveal" id="campoCta" onclick="iniciarConversa()">Começar conversa</button>
+    <label class="pesquisa-opcao reveal"><input type="checkbox" id="webSearchToggle" /> Pesquisar informações atuais e mostrar as fontes</label>
 
     <div class="ia-resposta" id="iaResposta">
       <div class="ia-quem">Dias K</div>
@@ -1394,6 +1402,7 @@ footer {
           <div class="ia-dots"><span></span><span></span><span></span></div>
         </div>
       </div>
+      <div class="ia-fontes" id="iaFontes"><div class="ia-fontes-titulo">Fontes consultadas</div><div id="iaFontesLista"></div></div>
     </div>
   </div>
 </section>
@@ -1763,17 +1772,38 @@ campoInput.addEventListener('input', () => {
 /* ─── CONVERSA COM DIAS K ─── */
 const API_URL = '';
 const historico = [];
+let ultimaFontes = [];
 
-async function pedirResposta(messages) {
-  if (!API_URL) return respostaLocal(messages);
+async function pedirResposta(messages, webSearch = false) {
+  if (!API_URL) {
+    if (webSearch) throw new Error('Pesquisa web ainda não configurada.');
+    return respostaLocal(messages);
+  }
+  ultimaFontes = [];
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages })
+    body: JSON.stringify({ messages, webSearch })
   });
   const data = await response.json();
   if (!response.ok || data.error) throw new Error(data.error || 'Falha na conversa.');
+  ultimaFontes = data.sources || [];
   return data.reply || 'Estou aqui. Pode continuar.';
+}
+
+function mostrarFontes() {
+  const fontes = document.getElementById('iaFontes');
+  const lista = document.getElementById('iaFontesLista');
+  lista.replaceChildren(...ultimaFontes.map(source => {
+    const link = document.createElement('a');
+    link.className = 'ia-fonte';
+    link.href = source.url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = source.title;
+    return link;
+  }));
+  fontes.classList.toggle('visivel', ultimaFontes.length > 0);
 }
 
 function respostaLocal(messages) {
@@ -1859,6 +1889,7 @@ async function iniciarConversa() {
   const cta = document.getElementById('campoCta');
   const resposta = document.getElementById('iaResposta');
   const iaTexto = document.getElementById('iaTexto');
+  const webSearch = document.getElementById('webSearchToggle').checked;
 
   cta.disabled = true;
   cta.textContent = 'Processando…';
@@ -1869,13 +1900,17 @@ async function iniciarConversa() {
   try {
     historico.push({ role: 'user', content: texto });
     atualizarDashboard();
-    const reply = await pedirResposta(historico);
+    const reply = await pedirResposta(historico, webSearch);
     historico.push({ role: 'assistant', content: reply });
 
     iaTexto.textContent = '';
     typeTextSlow(iaTexto, reply);
+    mostrarFontes();
   } catch (err) {
-    iaTexto.textContent = 'Não consegui responder agora. Tente novamente em instantes.';
+    iaTexto.textContent = err.message === 'Pesquisa web ainda não configurada.'
+      ? 'A pesquisa atual ainda não está configurada. Você pode continuar sem ela ou ativá-la depois que o backend for publicado.'
+      : 'Não consegui responder agora. Tente novamente em instantes.';
+    mostrarFontes();
   }
 
   cta.disabled = false;
@@ -1889,6 +1924,7 @@ async function continuarConversa() {
 
   const iaTexto = document.getElementById('iaTexto');
   const cta = document.getElementById('campoCta');
+  const webSearch = document.getElementById('webSearchToggle').checked;
   historico.push({ role: 'user', content: texto });
   atualizarDashboard();
   campoInput.value = '';
@@ -1899,12 +1935,16 @@ async function continuarConversa() {
   iaTexto.innerHTML = '<div class="ia-carregando"><div class="ia-dots"><span></span><span></span><span></span></div></div>';
 
   try {
-    const reply = await pedirResposta(historico);
+    const reply = await pedirResposta(historico, webSearch);
     historico.push({ role: 'assistant', content: reply });
     iaTexto.textContent = '';
     typeTextSlow(iaTexto, reply);
-  } catch {
-    iaTexto.textContent = 'A conexão falhou. Mas pode tentar de novo — estou aqui.';
+    mostrarFontes();
+  } catch (err) {
+    iaTexto.textContent = err.message === 'Pesquisa web ainda não configurada.'
+      ? 'A pesquisa atual ainda não está configurada. Continue sem fontes ou tente novamente depois.'
+      : 'A conexão falhou. Mas pode tentar de novo — estou aqui.';
+    mostrarFontes();
   }
 
   cta.disabled = false;
