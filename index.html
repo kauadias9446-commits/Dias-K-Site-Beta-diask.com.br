@@ -202,6 +202,8 @@ nav a:hover { color: var(--black); }
   opacity: .75;
   display: block;
 }
+.hero-photo-editorial { object-position: 62% center; }
+.hero-right .hero-illustration { display: none; }
 /* SVG illustration placeholder for hero (editorial, compositional) */
 .hero-illustration {
   width: 100%;
@@ -363,6 +365,26 @@ nav a:hover { color: var(--black); }
   font-size: 13px;
   line-height: 1.7;
 }
+.sec-visual { background: var(--off); border-top: 1px solid rgba(119,115,108,.14); }
+.visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+.visual-grid.reverse .visual-image { order: 2; }
+.visual-image { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: saturate(.72) contrast(.98); }
+.visual-copy { max-width: 460px; }
+.visual-title { color: var(--black); font-family: var(--serif); font-size: clamp(30px, 3.5vw, 50px); font-weight: 400; line-height: 1.12; margin-bottom: 20px; }
+.visual-body { color: var(--stone); font-size: 16px; line-height: 1.8; }
+.visual-note { color: var(--gold); font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 24px; }
+.visual-interface { border: 1px solid rgba(119,115,108,.2); background: #ebe7df; padding: 30px; margin-top: 32px; }
+.visual-interface-label { color: var(--gold); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 18px; }
+.visual-flow { display: grid; gap: 12px; }
+.visual-flow-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid rgba(119,115,108,.18); color: var(--black); font-family: var(--serif); font-size: 17px; padding-bottom: 12px; }
+.visual-flow-row span { color: var(--stone); font: 400 12px var(--sans); }
+.visual-progress-value { color: var(--black); font-family: var(--serif); font-size: 38px; }
+.visual-progress-track { height: 5px; background: rgba(119,115,108,.18); margin: 16px 0 9px; }
+.visual-progress-fill { width: 35%; height: 100%; background: var(--gold); }
+.visual-progress-meta { display: flex; justify-content: space-between; color: var(--stone); font-size: 12px; }
+.visual-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+.visual-tag { border: 1px solid rgba(119,115,108,.25); color: var(--stone); font-size: 12px; padding: 8px 11px; }
+@media (max-width: 900px) { .visual-grid, .visual-grid.reverse { grid-template-columns: 1fr; gap: 36px; } .visual-grid.reverse .visual-image { order: 0; } .visual-image { aspect-ratio: 4 / 3; } .visual-copy { max-width: none; } }
 
 /* ─── SEC 3: VOCÊ NÃO PRECISA SABER ─── */
 .sec-voce {
@@ -1184,7 +1206,8 @@ footer {
     <p class="hero-trust">Sem promessas fáceis. Sem respostas prontas.<br />Primeiro, entendemos você.</p>
   </div>
   <div class="hero-right">
-    <!-- Ilustração editorial cinematográfica — pessoa em momento reflexivo -->
+    <img class="hero-photo hero-photo-editorial" src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=88" alt="Pessoa em apartamento contemporâneo, refletindo ao fim de um dia de trabalho" fetchpriority="high" />
+    <!-- Ilustração editorial de fallback legado -->
     <svg class="hero-illustration" viewBox="0 0 680 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
       <defs>
         <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
@@ -1351,6 +1374,56 @@ footer {
           <div><h3 class="mapa-passo">Construir</h3><p class="mapa-texto">Uma estratégia pequena, concreta e ajustável começa a sair do papel.</p></div>
         </figcaption>
       </figure>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIÊNCIA VISUAL: VIDA REAL + INTELIGÊNCIA -->
+<section class="sec sec-visual" aria-labelledby="visual-entender">
+  <div class="sec-inner visual-grid">
+    <img class="visual-image reveal" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=88" alt="Pessoa organizando ideias em um notebook em um ambiente tranquilo" loading="lazy" />
+    <div class="visual-copy reveal">
+      <p class="visual-note">Começar sem saber</p>
+      <h2 class="visual-title" id="visual-entender">Você não precisa saber por onde começar.</h2>
+      <p class="visual-body">Você pode chegar apenas com um problema. A Dias K faz as perguntas certas para transformar uma sensação difusa em algo que possa ser compreendido e cuidado.</p>
+      <div class="visual-tags"><span class="visual-tag">Contexto</span><span class="visual-tag">Prioridades</span><span class="visual-tag">Limites reais</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-visual" aria-labelledby="visual-diagnostico">
+  <div class="sec-inner visual-grid reverse">
+    <div class="visual-copy reveal">
+      <p class="visual-note">Diagnóstico provisório</p>
+      <h2 class="visual-title" id="visual-diagnostico">O problema por trás do problema.</h2>
+      <p class="visual-body">A inteligência aparece quando o sistema organiza o que foi dito sem transformar uma hipótese em certeza.</p>
+      <div class="visual-interface">
+        <p class="visual-interface-label">Como organizamos</p>
+        <div class="visual-flow">
+          <div class="visual-flow-row">O que você disse <span>sintoma</span></div>
+          <div class="visual-flow-row">O que pode estar acontecendo <span>hipótese</span></div>
+          <div class="visual-flow-row">O que importa agora <span>prioridade</span></div>
+          <div class="visual-flow-row">O próximo passo possível <span>ação</span></div>
+        </div>
+      </div>
+    </div>
+    <img class="visual-image reveal" src="https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=1200&q=88" alt="Pessoa olhando pela janela no fim da tarde em um momento de reflexão" loading="lazy" />
+  </div>
+</section>
+
+<section class="sec sec-visual" aria-labelledby="visual-progresso">
+  <div class="sec-inner visual-grid">
+    <img class="visual-image reveal" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=88" alt="Mesa minimalista com notebook, caderno e café representando organização possível" loading="lazy" />
+    <div class="visual-copy reveal">
+      <p class="visual-note">Progresso possível</p>
+      <h2 class="visual-title" id="visual-progresso">Transformamos confusão em um caminho.</h2>
+      <p class="visual-body">Um plano não precisa ocupar sua vida inteira. Ele precisa caber nela, ser executável e mudar quando a realidade pedir.</p>
+      <div class="visual-interface">
+        <p class="visual-interface-label">Objetivo em construção</p>
+        <div class="visual-progress-value">R$ 1.750</div>
+        <div class="visual-progress-track"><div class="visual-progress-fill"></div></div>
+        <div class="visual-progress-meta"><span>35% do objetivo</span><span>Próximo passo: R$ 250</span></div>
+      </div>
     </div>
   </div>
 </section>

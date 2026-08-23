@@ -1,0 +1,76 @@
+{
+  "policy": "Photographs are sourced from Unsplash and used under the Unsplash License.",
+  "license_url": "https://unsplash.com/license",
+  "images": [
+    {
+      "id": "hero-apartment-reflection",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72"
+    },
+    {
+      "id": "organize-notebook",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
+    },
+    {
+      "id": "reflection-window",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1499209974431-9dddcece7f88"
+    },
+    {
+      "id": "possible-organization",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1499750310107-5fef28a66643"
+    },
+    {
+      "id": "observe-context",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2"
+    },
+    {
+      "id": "organize-diagnosis",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1556761175-b413da4baf72"
+    },
+    {
+      "id": "build-together",
+      "image_source": "Unsplash",
+      "license_type": "Unsplash License",
+      "license_url": "https://unsplash.com/license",
+      "photographer": "To be verified from the Unsplash photo page before paid campaigns",
+      "usage_rights": "Commercial website use subject to the Unsplash License; verify photo page before advertising campaigns",
+      "date_added": "2026-08-23",
+      "url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902"
+    }
+  ]
+}
