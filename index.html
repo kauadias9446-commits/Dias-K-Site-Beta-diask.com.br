@@ -511,6 +511,30 @@ files  font-family: var(--serif);
   align-items: center;
   gap: 8px;
 }
+.sec-dashboard { background: #ebe7df; border-top: 1px solid rgba(119,115,108,.14); }
+.dashboard-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 52px; }
+.dashboard-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 50px); font-weight: 400; line-height: 1.12; }
+.dashboard-kicker { color: var(--stone); font-size: 14px; margin-top: 10px; }
+.dashboard-reset { border: 0; border-bottom: 1px solid rgba(119,115,108,.45); background: transparent; color: var(--stone); cursor: pointer; font: 400 12px var(--sans); padding: 0 0 3px; }
+.dashboard-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 1px; background: rgba(119,115,108,.2); border: 1px solid rgba(119,115,108,.2); }
+.dashboard-bloco { background: var(--off); padding: 30px; min-height: 190px; }
+.dashboard-bloco-wide { grid-row: span 2; }
+.dashboard-label { color: var(--gold); font-size: 10px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 18px; }
+.dashboard-value { color: var(--black); font-family: var(--serif); font-size: 24px; line-height: 1.3; }
+.dashboard-muted { color: var(--stone); font-size: 14px; line-height: 1.7; }
+.dashboard-action { border-left: 2px solid var(--gold); color: var(--black); font-family: var(--serif); font-size: 20px; line-height: 1.35; padding-left: 16px; }
+.dashboard-action-button { margin-top: 20px; border: 0; background: var(--black); color: var(--off); cursor: pointer; font: 500 12px var(--sans); letter-spacing: .8px; padding: 12px 18px; }
+.dashboard-progress { height: 5px; background: rgba(119,115,108,.16); margin: 20px 0 10px; overflow: hidden; }
+.dashboard-progress-bar { width: 0; height: 100%; background: var(--gold); transition: width .4s var(--ease); }
+.dashboard-progress-meta { display: flex; justify-content: space-between; color: var(--stone); font-size: 12px; }
+.checkin-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.checkin-option, .feedback-option { border: 1px solid rgba(119,115,108,.28); background: transparent; color: var(--stone); cursor: pointer; font: 400 12px var(--sans); padding: 9px 12px; }
+.checkin-option:hover, .feedback-option:hover, .checkin-option.ativo, .feedback-option.ativo { border-color: var(--black); color: var(--black); }
+.dashboard-feedback { border-top: 1px solid rgba(119,115,108,.18); margin-top: 20px; padding-top: 20px; }
+.feedback-options { display: flex; gap: 8px; }
+.memory-controls { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
+.memory-control { border: 0; border-bottom: 1px solid rgba(119,115,108,.4); background: transparent; color: var(--stone); cursor: pointer; font: 400 12px var(--sans); padding: 0 0 3px; }
+@media (max-width: 700px) { .dashboard-head { display: block; } .dashboard-reset { margin-top: 20px; } .dashboard-grid { grid-template-columns: 1fr; } .dashboard-bloco-wide { grid-row: auto; } .dashboard-bloco { min-height: 0; padding: 24px; } }
 .ia-dots span {
   display: inline-block;
   width: 5px; height: 5px;
@@ -1374,6 +1398,60 @@ footer {
   </div>
 </section>
 
+<!-- DASHBOARD PESSOAL -->
+<section class="sec sec-dashboard" id="meu-espaco" aria-labelledby="dashboard-title">
+  <div class="sec-inner">
+    <div class="dashboard-head reveal">
+      <div>
+        <span class="sec-label">Meu espaço</span>
+        <h2 class="dashboard-title" id="dashboard-title">O que vamos resolver hoje?</h2>
+        <p class="dashboard-kicker" id="dashboardKicker">Seu plano começa quando o problema ganha forma.</p>
+      </div>
+      <button class="dashboard-reset" id="dashboardReset" type="button">Apagar meus dados</button>
+    </div>
+    <div class="dashboard-grid reveal">
+      <div class="dashboard-bloco dashboard-bloco-wide">
+        <div class="dashboard-label">Meu foco</div>
+        <p class="dashboard-value" id="dashboardFocus">Ainda vamos descobrir juntos.</p>
+        <p class="dashboard-muted" id="dashboardDiagnosis">Comece contando o que está acontecendo. A Dias K organiza o caminho com você.</p>
+        <div class="memory-controls">
+          <button class="memory-control" id="memoryDisable" type="button">Desativar memória local</button>
+          <button class="memory-control" id="memoryExport" type="button">Exportar meus dados</button>
+        </div>
+      </div>
+      <div class="dashboard-bloco">
+        <div class="dashboard-label">Próximo passo</div>
+        <p class="dashboard-action" id="dashboardNext">Começar a conversa</p>
+        <button class="dashboard-action-button" id="dashboardStart" type="button">Fazer agora</button>
+      </div>
+      <div class="dashboard-bloco">
+        <div class="dashboard-label">Meu progresso</div>
+        <p class="dashboard-value"><span id="dashboardProgress">0</span>%</p>
+        <div class="dashboard-progress"><div class="dashboard-progress-bar" id="dashboardProgressBar"></div></div>
+        <div class="dashboard-progress-meta"><span id="dashboardProgressLabel">Sem plano iniciado</span><span>meta</span></div>
+      </div>
+      <div class="dashboard-bloco">
+        <div class="dashboard-label">Como foi sua semana?</div>
+        <div class="checkin-options" id="checkinOptions">
+          <button class="checkin-option" type="button" data-checkin="Excelente">Excelente</button>
+          <button class="checkin-option" type="button" data-checkin="Boa">Boa</button>
+          <button class="checkin-option" type="button" data-checkin="Difícil">Difícil</button>
+          <button class="checkin-option" type="button" data-checkin="Não consegui">Não consegui</button>
+        </div>
+        <p class="dashboard-muted" id="checkinMessage">Seu retorno ajusta o próximo passo.</p>
+      </div>
+      <div class="dashboard-bloco">
+        <div class="dashboard-label">Isso ajudou?</div>
+        <div class="feedback-options">
+          <button class="feedback-option" type="button" data-feedback="Funcionou">Funcionou</button>
+          <button class="feedback-option" type="button" data-feedback="Não funcionou">Não funcionou</button>
+        </div>
+        <div class="dashboard-feedback"><p class="dashboard-muted" id="feedbackMessage">Seu feedback melhora a próxima recomendação.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- SEC 5: COMO FUNCIONA -->
 <section class="sec sec-como" id="como-funciona">
   <div class="sec-inner">
@@ -1790,6 +1868,7 @@ async function iniciarConversa() {
 
   try {
     historico.push({ role: 'user', content: texto });
+    atualizarDashboard();
     const reply = await pedirResposta(historico);
     historico.push({ role: 'assistant', content: reply });
 
@@ -1811,6 +1890,7 @@ async function continuarConversa() {
   const iaTexto = document.getElementById('iaTexto');
   const cta = document.getElementById('campoCta');
   historico.push({ role: 'user', content: texto });
+  atualizarDashboard();
   campoInput.value = '';
   campoInput.style.height = 'auto';
 
@@ -1841,6 +1921,96 @@ function typeTextSlow(el, text) {
     }
   }, 16);
 }
+
+/* ─── CICLO DE ACOMPANHAMENTO ─── */
+const dashboardStateKey = 'diasK.dashboard';
+const dashboardState = JSON.parse(localStorage.getItem(dashboardStateKey) || '{"progress":0,"feedback":[],"checkins":[]}');
+const dashboardFocus = document.getElementById('dashboardFocus');
+const dashboardDiagnosis = document.getElementById('dashboardDiagnosis');
+const dashboardNext = document.getElementById('dashboardNext');
+const dashboardProgress = document.getElementById('dashboardProgress');
+const dashboardProgressBar = document.getElementById('dashboardProgressBar');
+const dashboardProgressLabel = document.getElementById('dashboardProgressLabel');
+
+function salvarDashboard() {
+  localStorage.setItem(dashboardStateKey, JSON.stringify(dashboardState));
+}
+
+function atualizarDashboard() {
+  const usuario = historico.filter(message => message.role === 'user');
+  if (!usuario.length) return;
+  const texto = usuario.map(message => message.content).join(' ').toLowerCase();
+  const tema = texto.includes('dinheiro') || texto.includes('gasto') || texto.includes('divida') ? 'organização financeira'
+    : texto.includes('tempo') || texto.includes('trabalho') || texto.includes('rotina') ? 'organização da rotina'
+      : texto.includes('familia') || texto.includes('relacion') ? 'relações e presença' : 'um objetivo pessoal';
+  dashboardState.focus = tema;
+  dashboardState.progress = Math.min(75, usuario.length * 12);
+  dashboardFocus.textContent = dashboardState.focus.charAt(0).toUpperCase() + dashboardState.focus.slice(1);
+  dashboardDiagnosis.textContent = usuario.length >= 4
+    ? 'Já há contexto suficiente para testar um próximo passo e observar o que acontece na vida real.'
+    : 'Ainda estamos entendendo o contexto. Cada resposta reduz uma parte da incerteza.';
+  dashboardNext.textContent = usuario.length >= 4
+    ? 'Revisar o que foi possível fazer e ajustar o próximo passo.'
+    : 'Continuar a conversa para tornar o problema mais específico.';
+  dashboardProgress.textContent = dashboardState.progress;
+  dashboardProgressBar.style.width = `${dashboardState.progress}%`;
+  dashboardProgressLabel.textContent = usuario.length >= 4 ? 'Plano em construção' : 'Entendimento inicial';
+  salvarDashboard();
+}
+
+document.getElementById('dashboardStart').addEventListener('click', () => {
+  campoInput.focus();
+  campoInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+document.querySelectorAll('[data-checkin]').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-checkin]').forEach(item => item.classList.remove('ativo'));
+    button.classList.add('ativo');
+    dashboardState.checkins.push({ value: button.dataset.checkin, date: new Date().toISOString() });
+    document.getElementById('checkinMessage').textContent = button.dataset.checkin === 'Não consegui'
+      ? 'Esse plano não funcionou como esperávamos. Vamos descobrir o que tornou isso difícil.'
+      : 'Anotado. Esse retorno será levado em conta no próximo ajuste.';
+    salvarDashboard();
+  });
+});
+document.querySelectorAll('[data-feedback]').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-feedback]').forEach(item => item.classList.remove('ativo'));
+    button.classList.add('ativo');
+    dashboardState.feedback.push({ value: button.dataset.feedback, date: new Date().toISOString() });
+    document.getElementById('feedbackMessage').textContent = button.dataset.feedback === 'Funcionou'
+      ? 'Obrigado. Vamos preservar o que fez sentido.'
+      : 'Obrigado. Vamos reduzir, ajustar ou trocar a estratégia.';
+    salvarDashboard();
+  });
+});
+document.getElementById('memoryExport').addEventListener('click', () => {
+  const arquivo = new Blob([JSON.stringify({ dashboard: dashboardState, conversation: historico }, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(arquivo);
+  link.download = 'dias-k-dados.json';
+  link.click();
+  URL.revokeObjectURL(link.href);
+});
+document.getElementById('memoryDisable').addEventListener('click', event => {
+  localStorage.removeItem(dashboardStateKey);
+  dashboardState.progress = 0;
+  dashboardState.focus = '';
+  dashboardFocus.textContent = 'Memória local desativada.';
+  dashboardDiagnosis.textContent = 'A Dias K não manterá o estado deste dispositivo.';
+  dashboardNext.textContent = 'Começar uma nova conversa.';
+  dashboardProgress.textContent = '0';
+  dashboardProgressBar.style.width = '0%';
+  event.currentTarget.textContent = 'Memória local desativada';
+});
+document.getElementById('dashboardReset').addEventListener('click', () => {
+  if (!confirm('Apagar o foco, o progresso e os retornos deste dispositivo?')) return;
+  localStorage.removeItem(dashboardStateKey);
+  localStorage.removeItem('diasK.conta');
+  localStorage.removeItem('diasK.sessao');
+  window.location.reload();
+});
+atualizarDashboard();
 
 /* ─── LOGIN LOCAL ─── */
 const loginModal = document.getElementById('loginModal');
