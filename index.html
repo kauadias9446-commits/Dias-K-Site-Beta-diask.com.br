@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<meta name="dias-k-api-url" content="" />
 <style>
 /* ─── TOKENS ─── */
 :root {
@@ -504,42 +504,6 @@ nav a:hover { color: var(--black); }
 .pesquisa-opcao { display: flex; align-items: center; gap: 8px; color: var(--stone); font-size: 12px; margin: 16px 0 0; text-align: left; }
 .pesquisa-opcao input { accent-color: var(--gold); }
 
-/* ─── RESPOSTA IA ─── */
-.ia-resposta {
-  margin-top: 56px;
-  text-align: left;
-  background: var(--white);
-  border: 1px solid rgba(119,115,108,.15);
-  padding: 40px 48px;
-  display: none;
-}
-.ia-resposta.visivel { display: block; }
-.ia-quem {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 20px;
-}
-.ia-texto {
-files  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.75;
-  color: var(--black);
-  white-space: pre-wrap;
-}
-.ia-fontes { display: none; margin-top: 26px; padding-top: 18px; border-top: 1px solid rgba(119,115,108,.15); }
-.ia-fontes.visivel { display: block; }
-.ia-fontes-titulo { color: var(--gold); font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-.ia-fonte { display: block; color: var(--stone); font-size: 12px; line-height: 1.5; margin-top: 8px; text-decoration: none; }
-.ia-fonte:hover { color: var(--black); }
-.ia-carregando {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 .sec-dashboard { background: #ebe7df; border-top: 1px solid rgba(119,115,108,.14); }
 .dashboard-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 52px; }
 .dashboard-title { font-family: var(--serif); font-size: clamp(30px, 3.5vw, 50px); font-weight: 400; line-height: 1.12; }
@@ -564,17 +528,6 @@ files  font-family: var(--serif);
 .memory-controls { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; }
 .memory-control { border: 0; border-bottom: 1px solid rgba(119,115,108,.4); background: transparent; color: var(--stone); cursor: pointer; font: 400 12px var(--sans); padding: 0 0 3px; }
 @media (max-width: 700px) { .dashboard-head { display: block; } .dashboard-reset { margin-top: 20px; } .dashboard-grid { grid-template-columns: 1fr; } .dashboard-bloco-wide { grid-row: auto; } .dashboard-bloco { min-height: 0; padding: 24px; } }
-.ia-dots span {
-  display: inline-block;
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--stone);
-  animation: dot-pulse .9s infinite;
-}
-.ia-dots span:nth-child(2){animation-delay:.2s}
-.ia-dots span:nth-child(3){animation-delay:.4s}
-@keyframes dot-pulse{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
-
 /* ─── SEC 5: COMO FUNCIONA ─── */
 .sec-como {
   background: var(--graf);
@@ -654,7 +607,6 @@ files  font-family: var(--serif);
   border-bottom: 1px solid rgba(119,115,108,.15);
 }
 .diag-par:first-of-type { border-top: 1px solid rgba(119,115,108,.15); }
-.diag-lado { }
 .diag-quem {
   font-size: 11px;
   font-weight: 500;
@@ -1044,7 +996,6 @@ footer {
   .mapa-grid { grid-template-columns: 1fr; gap: 48px; }
   .sec-cta-final { padding: 100px 24px; }
   footer { padding: 64px 24px 40px; }
-  .ia-resposta { padding: 28px 24px; }
 }
 
 /* ─── LOGIN ─── */
@@ -1185,6 +1136,7 @@ footer {
     <a href="#como-funciona">Como funciona</a>
     <a href="#abordagem">Nossa abordagem</a>
     <a href="#confianca">Segurança</a>
+    <a href="cultura.html">Cultura</a>
     <a href="#para-voce">Para você</a>
   </nav>
   <div class="nav-right">
@@ -1396,7 +1348,7 @@ footer {
     <div class="visual-copy reveal">
       <p class="visual-note">Diagnóstico provisório</p>
       <h2 class="visual-title" id="visual-diagnostico">O problema por trás do problema.</h2>
-      <p class="visual-body">A inteligência aparece quando o sistema organiza o que foi dito sem transformar uma hipótese em certeza.</p>
+      <p class="visual-body">A clareza aparece quando organizamos o que foi dito sem transformar uma hipótese em certeza.</p>
       <div class="visual-interface">
         <p class="visual-interface-label">Como organizamos</p>
         <div class="visual-flow">
@@ -1457,26 +1409,16 @@ footer {
   </div>
 </section>
 
-<!-- SEC 4: CAMPO PRINCIPAL — IA ao vivo -->
+<!-- SEC 4: CAMPO PRINCIPAL -->
 <section class="sec-campo" id="campo">
   <div class="campo-center">
     <h2 class="campo-titulo reveal">O que está acontecendo?</h2>
-    <p class="campo-subtitulo reveal">Conte para a Dias K, com suas palavras.</p>
+    <p class="campo-subtitulo reveal">Registre o que está acontecendo, com suas palavras.</p>
     <div class="campo-wrapper reveal">
       <textarea class="campo-input" id="campoInput" rows="3" placeholder="Eu trabalho o dia inteiro e…"></textarea>
     </div>
-    <button class="campo-cta reveal" id="campoCta" onclick="iniciarConversa()">Começar conversa</button>
-    <label class="pesquisa-opcao reveal"><input type="checkbox" id="webSearchToggle" /> Pesquisar informações atuais e mostrar as fontes</label>
-
-    <div class="ia-resposta" id="iaResposta">
-      <div class="ia-quem">Dias K</div>
-      <div class="ia-texto" id="iaTexto">
-        <div class="ia-carregando">
-          <div class="ia-dots"><span></span><span></span><span></span></div>
-        </div>
-      </div>
-      <div class="ia-fontes" id="iaFontes"><div class="ia-fontes-titulo">Fontes consultadas</div><div id="iaFontesLista"></div></div>
-    </div>
+    <button class="campo-cta reveal" id="campoCta" type="button">Salvar relato</button>
+    <p class="campo-status reveal" id="campoStatus" role="status"></p>
   </div>
 </section>
 
@@ -1503,7 +1445,7 @@ footer {
       </div>
       <div class="dashboard-bloco">
         <div class="dashboard-label">Próximo passo</div>
-        <p class="dashboard-action" id="dashboardNext">Começar a conversa</p>
+        <p class="dashboard-action" id="dashboardNext">Registrar um relato</p>
         <button class="dashboard-action-button" id="dashboardStart" type="button">Fazer agora</button>
       </div>
       <div class="dashboard-bloco">
@@ -1647,7 +1589,7 @@ footer {
     <div class="confianca-links reveal">
       <a class="confianca-link" href="#">Quem somos</a>
       <a class="confianca-link" href="#">Como funciona</a>
-      <a class="confianca-link" href="#">Como usamos IA</a>
+      <a class="confianca-link" href="cultura.html">Código de cultura</a>
       <a class="confianca-link" href="#">Privacidade</a>
       <a class="confianca-link" href="#">Segurança</a>
       <a class="confianca-link" href="#">Transparência</a>
@@ -1760,7 +1702,7 @@ footer {
         <li><a href="#">Como funciona</a></li>
         <li><a href="#">Nossa abordagem</a></li>
         <li><a href="#">Segurança</a></li>
-        <li><a href="#">Transparência</a></li>
+        <li><a href="cultura.html">Código de cultura</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -1792,9 +1734,6 @@ footer {
     <h2 class="login-titulo" id="loginTitulo">Voltar para sua jornada.</h2>
     <p class="login-intro" id="loginIntro">Entre para continuar de onde parou.</p>
 
-    <div class="google-login" id="googleLogin"></div>
-    <div class="login-ou">ou</div>
-
     <form class="login-form" id="loginForm">
       <div class="login-campo">
         <label for="loginEmail">E-mail</label>
@@ -1802,7 +1741,7 @@ footer {
       </div>
       <div class="login-campo">
         <label for="loginSenha">Senha</label>
-        <input id="loginSenha" name="password" type="password" minlength="6" autocomplete="current-password" required />
+        <input id="loginSenha" name="password" type="password" minlength="8" autocomplete="current-password" required />
       </div>
       <button class="login-submit" id="loginSubmit" type="submit">Entrar</button>
     </form>
@@ -1842,117 +1781,10 @@ campoInput.addEventListener('input', () => {
   campoInput.style.height = campoInput.scrollHeight + 'px';
 });
 
-/* ─── CONVERSA COM DIAS K ─── */
-const API_URL = '';
+/* ─── RELATO LOCAL ─── */
+const API_URL = document.querySelector('meta[name="dias-k-api-url"]')?.content.trim() || '';
 const historico = [];
-let ultimaFontes = [];
-
-async function pedirResposta(messages, webSearch = false) {
-  if (!API_URL) {
-    if (webSearch) throw new Error('Pesquisa web ainda não configurada.');
-    return respostaLocal(messages);
-  }
-  ultimaFontes = [];
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, webSearch })
-  });
-  const data = await response.json();
-  if (!response.ok || data.error) throw new Error(data.error || 'Falha na conversa.');
-  ultimaFontes = data.sources || [];
-  return data.reply || 'Estou aqui. Pode continuar.';
-}
-
-function mostrarFontes() {
-  const fontes = document.getElementById('iaFontes');
-  const lista = document.getElementById('iaFontesLista');
-  lista.replaceChildren(...ultimaFontes.map(source => {
-    const link = document.createElement('a');
-    link.className = 'ia-fonte';
-    link.href = source.url;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.textContent = source.title;
-    return link;
-  }));
-  fontes.classList.toggle('visivel', ultimaFontes.length > 0);
-}
-
-function respostaLocal(messages) {
-  const mensagensDoUsuario = messages.filter(message => message.role === 'user');
-  const totalMensagens = mensagensDoUsuario.length;
-  const textoCompleto = mensagensDoUsuario.map(message => message.content).join(' ').toLowerCase();
-  const semAcentos = textoCompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const temas = {
-    financeiro: ['dinheiro', 'divida', 'guardar', 'gasto', 'renda', 'salario', 'conta'],
-    rotina: ['tempo', 'trabalho', 'cansad', 'rotina', 'procrast', 'agenda', 'sono'],
-    relacionamentos: ['familia', 'relacion', 'conversa', 'casamento', 'filho', 'sozinh'],
-    pessoal: ['medo', 'ansiedade', 'mudan', 'disciplina', 'desanimo', 'objetivo']
-  };
-  const pontuacoes = Object.fromEntries(Object.entries(temas).map(([tema, palavras]) => [
-    tema, palavras.reduce((total, palavra) => total + (semAcentos.includes(palavra) ? 1 : 0), 0)
-  ]));
-  const assunto = Object.entries(pontuacoes).sort((a, b) => b[1] - a[1])[0][1] > 0
-    ? Object.entries(pontuacoes).sort((a, b) => b[1] - a[1])[0][0] : 'pessoal';
-  const mencionaObjetivo = /quero|preciso|gostaria|pretendo|meta|objetivo|sonho/i.test(semAcentos);
-  const mencionaTentativa = /tentei|comecei|fiz|ja tentei|nao consegui manter|parei/i.test(semAcentos);
-  const mencionaPrazo = /hoje|amanha|semana|mes|ano|urgente|prazo|logo/i.test(semAcentos);
-  const mencionaCausa = /porque|causa|motivo|devido|acontece quando|por conta/i.test(semAcentos);
-  const mencionaImpacto = /afeta|impacta|atrapalha|prejudica|perco|sinto|fico|nao consigo|estou/i.test(semAcentos);
-  const mencionaRestricao = /falta de|dificulta|impede|limita|nao tenho|pouco tempo|sem dinheiro|energia/i.test(semAcentos);
-  const respostasAnteriores = messages.filter(message => message.role === 'assistant').map(message => message.content.toLowerCase()).join(' ');
-  const jaPerguntouObjetivo = respostasAnteriores.includes('o que você gostaria') || respostasAnteriores.includes('tornar isso concreto');
-  const jaPerguntouCausa = respostasAnteriores.includes('antes desse problema') || respostasAnteriores.includes('o que normalmente acontece');
-  const jaPerguntouRestricao = respostasAnteriores.includes('o que mais limita');
-  const jaPerguntouTentativa = respostasAnteriores.includes('já tentou alguma mudança');
-  const foco = {
-    financeiro: 'sua relação com o dinheiro',
-    rotina: 'sua rotina e o espaço que o trabalho ocupa',
-    relacionamentos: 'a relação com as pessoas importantes para você',
-    pessoal: 'essa situação que você trouxe'
-  }[assunto];
-  const proximoPasso = {
-    financeiro: 'registre entradas, saídas e o motivo de cada gasto por sete dias antes de cortar qualquer coisa',
-    rotina: 'observe sua agenda em blocos de 30 minutos e proteja um bloco curto para a prioridade do dia',
-    relacionamentos: 'marque uma conversa de 20 minutos, ouvindo primeiro e levando um ponto concreto para dizer',
-    pessoal: 'escolha uma ação de 15 minutos e repita no mesmo horário durante sete dias'
-  }[assunto];
-  const criterio = {
-    financeiro: 'saber para onde o dinheiro está indo',
-    rotina: 'quantos blocos protegidos foram cumpridos',
-    relacionamentos: 'se a conversa ficou mais clara e menos defensiva',
-    pessoal: 'quantos dias a ação aconteceu, sem exigir perfeição'
-  }[assunto];
-
-  if (totalMensagens === 1 && !mencionaImpacto) {
-    return `Entendi. Quero olhar primeiro para ${foco}, sem presumir qual é a solução. Qual é o efeito mais concreto disso na sua vida hoje?`;
-  }
-  if (!mencionaObjetivo && !jaPerguntouObjetivo) {
-    return `Isso ajuda a dar forma ao problema. Se essa situação melhorasse nos próximos meses, o que você gostaria de conseguir fazer ou viver de maneira diferente?`;
-  }
-  if (!mencionaObjetivo && jaPerguntouObjetivo && totalMensagens === 2) {
-    return 'Para tornar isso concreto, pense no resultado que faria você dizer: agora minha vida está melhor. Qual seria esse resultado?';
-  }
-  if (!mencionaCausa && !jaPerguntouCausa && totalMensagens <= 4) {
-    return 'Entendi o que você quer mudar. O que normalmente acontece antes desse problema aparecer? Esse momento pode indicar uma causa mais útil do que o sintoma inicial.';
-  }
-  if (!mencionaRestricao && !jaPerguntouRestricao && totalMensagens <= 5) {
-    return 'Agora quero respeitar a sua realidade: o que mais limita uma mudança hoje, tempo, energia, dinheiro, apoio ou outra coisa?';
-  }
-  if (!mencionaTentativa && !jaPerguntouTentativa && totalMensagens <= 6) {
-    return 'Obrigado por detalhar. Você já tentou alguma mudança específica? O que aconteceu quando tentou manter esse caminho?';
-  }
-
-  if (totalMensagens >= 4) {
-    const urgencia = mencionaPrazo ? 'Como você mencionou um prazo, vale separar o que precisa ser resolvido agora do que pode ser construído depois. ' : '';
-    return `Leitura provisória:\nSintoma: o que apareceu no começo da conversa.\nFoco provável: ${foco}.\nHipótese: o padrão pode estar ligado ao contexto e às restrições que você descreveu, mas ainda não é uma certeza.\n\n${urgencia}Próximo experimento (7 dias): ${proximoPasso}.\nCritério de acompanhamento: ${criterio}.\n\nDepois desse teste, a estratégia deve ser ajustada com base no que realmente aconteceu, não no que parecia funcionar em teoria.`;
-  }
-
-  return `Com o que você trouxe até aqui, eu manteria o foco em ${foco}. Em vez de aumentar a meta, revise o experimento: o que funcionou, em qual momento você travou e o que precisaria mudar para atender ao critério de ${criterio}? Essa resposta indica o próximo ajuste com mais precisão.`;
-}
-
-async function iniciarConversa() {
+function registrarRelato() {
   const texto = campoInput.value.trim();
   if (!texto) {
     campoInput.focus();
@@ -1960,84 +1792,29 @@ async function iniciarConversa() {
   }
 
   const cta = document.getElementById('campoCta');
-  const resposta = document.getElementById('iaResposta');
-  const iaTexto = document.getElementById('iaTexto');
-  const webSearch = document.getElementById('webSearchToggle').checked;
-
-  cta.disabled = true;
-  cta.textContent = 'Processando…';
-  resposta.classList.add('visivel');
-  iaTexto.innerHTML = '<div class="ia-carregando"><div class="ia-dots"><span></span><span></span><span></span></div></div>';
-  resposta.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-  try {
-    historico.push({ role: 'user', content: texto });
-    atualizarDashboard();
-    const reply = await pedirResposta(historico, webSearch);
-    historico.push({ role: 'assistant', content: reply });
-
-    iaTexto.textContent = '';
-    typeTextSlow(iaTexto, reply);
-    mostrarFontes();
-  } catch (err) {
-    iaTexto.textContent = err.message === 'Pesquisa web ainda não configurada.'
-      ? 'A pesquisa atual ainda não está configurada. Você pode continuar sem ela ou ativá-la depois que o backend for publicado.'
-      : 'Não consegui responder agora. Tente novamente em instantes.';
-    mostrarFontes();
-  }
-
-  cta.disabled = false;
-  cta.textContent = 'Continuar conversa';
-  cta.onclick = continuarConversa;
-}
-
-async function continuarConversa() {
-  const texto = campoInput.value.trim();
-  if (!texto) { campoInput.focus(); return; }
-
-  const iaTexto = document.getElementById('iaTexto');
-  const cta = document.getElementById('campoCta');
-  const webSearch = document.getElementById('webSearchToggle').checked;
   historico.push({ role: 'user', content: texto });
   atualizarDashboard();
   campoInput.value = '';
   campoInput.style.height = 'auto';
-
-  cta.disabled = true;
-  cta.textContent = 'Processando…';
-  iaTexto.innerHTML = '<div class="ia-carregando"><div class="ia-dots"><span></span><span></span><span></span></div></div>';
-
-  try {
-    const reply = await pedirResposta(historico, webSearch);
-    historico.push({ role: 'assistant', content: reply });
-    iaTexto.textContent = '';
-    typeTextSlow(iaTexto, reply);
-    mostrarFontes();
-  } catch (err) {
-    iaTexto.textContent = err.message === 'Pesquisa web ainda não configurada.'
-      ? 'A pesquisa atual ainda não está configurada. Continue sem fontes ou tente novamente depois.'
-      : 'A conexão falhou. Mas pode tentar de novo — estou aqui.';
-    mostrarFontes();
-  }
-
-  cta.disabled = false;
-  cta.textContent = 'Continuar conversa';
+  document.getElementById('campoStatus').textContent = 'Relato salvo neste dispositivo. Não há resposta automática.';
+  cta.textContent = 'Salvar outro relato';
 }
 
-function typeTextSlow(el, text) {
-  let i = 0;
-  const iv = setInterval(() => {
-    if (i < text.length) {
-      el.textContent += text[i++];
-    } else {
-      clearInterval(iv);
-    }
-  }, 16);
-}
+document.getElementById('campoCta').addEventListener('click', registrarRelato);
 
 /* ─── CICLO DE ACOMPANHAMENTO ─── */
 const dashboardStateKey = 'diasK.dashboard';
-const dashboardState = JSON.parse(localStorage.getItem(dashboardStateKey) || '{"progress":0,"feedback":[],"checkins":[]}');
+const estadoDashboardInicial = { progress: 0, feedback: [], checkins: [] };
+let dashboardState;
+try {
+  const estadoSalvo = JSON.parse(localStorage.getItem(dashboardStateKey) || 'null');
+  dashboardState = estadoSalvo && typeof estadoSalvo === 'object'
+    ? { ...estadoDashboardInicial, ...estadoSalvo }
+    : { ...estadoDashboardInicial };
+} catch {
+  dashboardState = { ...estadoDashboardInicial };
+  localStorage.removeItem(dashboardStateKey);
+}
 const dashboardFocus = document.getElementById('dashboardFocus');
 const dashboardDiagnosis = document.getElementById('dashboardDiagnosis');
 const dashboardNext = document.getElementById('dashboardNext');
@@ -2061,10 +1838,10 @@ function atualizarDashboard() {
   dashboardFocus.textContent = dashboardState.focus.charAt(0).toUpperCase() + dashboardState.focus.slice(1);
   dashboardDiagnosis.textContent = usuario.length >= 4
     ? 'Já há contexto suficiente para testar um próximo passo e observar o que acontece na vida real.'
-    : 'Ainda estamos entendendo o contexto. Cada resposta reduz uma parte da incerteza.';
+    : 'O relato fica registrado para você acompanhar o contexto com mais clareza.';
   dashboardNext.textContent = usuario.length >= 4
     ? 'Revisar o que foi possível fazer e ajustar o próximo passo.'
-    : 'Continuar a conversa para tornar o problema mais específico.';
+    : 'Registrar outro relato para tornar o problema mais específico.';
   dashboardProgress.textContent = dashboardState.progress;
   dashboardProgressBar.style.width = `${dashboardState.progress}%`;
   dashboardProgressLabel.textContent = usuario.length >= 4 ? 'Plano em construção' : 'Entendimento inicial';
@@ -2111,7 +1888,7 @@ document.getElementById('memoryDisable').addEventListener('click', event => {
   dashboardState.focus = '';
   dashboardFocus.textContent = 'Memória local desativada.';
   dashboardDiagnosis.textContent = 'A Dias K não manterá o estado deste dispositivo.';
-  dashboardNext.textContent = 'Começar uma nova conversa.';
+  dashboardNext.textContent = 'Registrar um novo relato.';
   dashboardProgress.textContent = '0';
   dashboardProgressBar.style.width = '0%';
   event.currentTarget.textContent = 'Memória local desativada';
@@ -2125,7 +1902,7 @@ document.getElementById('dashboardReset').addEventListener('click', () => {
 });
 atualizarDashboard();
 
-/* ─── LOGIN LOCAL ─── */
+/* ─── AUTENTICAÇÃO ─── */
 const loginModal = document.getElementById('loginModal');
 const loginTrigger = document.getElementById('loginTrigger');
 const loginClose = document.getElementById('loginClose');
@@ -2136,44 +1913,37 @@ const loginSubmit = document.getElementById('loginSubmit');
 const loginSession = document.getElementById('loginSession');
 const loginTitulo = document.getElementById('loginTitulo');
 const loginIntro = document.getElementById('loginIntro');
-const googleLogin = document.getElementById('googleLogin');
-const googleClientId = '283689691923-62e341o5p6cto65hok847t7i3ce53pv3.apps.googleusercontent.com';
 let modoCadastro = false;
 
-function inicializarGoogleLogin() {
-  if (!window.google?.accounts?.id) return;
-  window.google.accounts.id.initialize({
-    client_id: googleClientId,
-    callback: receberLoginGoogle,
-    auto_select: false,
-    cancel_on_tap_outside: true
-  });
-  window.google.accounts.id.renderButton(googleLogin, {
-    theme: 'outline',
-    size: 'large',
-    text: 'signin_with',
-    shape: 'rectangular',
-    width: 344
-  });
+function authUrl(action) {
+  return API_URL ? `${API_URL.replace(/\/$/, '')}/auth/${action}` : '';
 }
 
-function receberLoginGoogle(resposta) {
-  try {
-    const payload = JSON.parse(atob(resposta.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-    localStorage.setItem('diasK.sessao', payload.email);
-    localStorage.setItem('diasK.googleNome', payload.name || '');
-    mostrarSessao();
-  } catch {
-    loginMessage.textContent = 'Não foi possível concluir o login Google.';
-  }
+async function authRequest(action, body = {}) {
+  const url = authUrl(action);
+  if (!url) throw new Error('Autenticação ainda não configurada.');
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify(body)
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'Não foi possível autenticar.');
+  return data;
 }
 
 function abrirLogin() {
   loginModal.classList.add('aberto');
   loginMessage.textContent = '';
   document.body.style.overflow = 'hidden';
-  if (localStorage.getItem('diasK.sessao')) mostrarSessao();
-  else mostrarFormulario();
+  mostrarFormulario();
+  authRequest('session').then(data => {
+    localStorage.setItem('diasK.sessao', data.user.email);
+    mostrarSessao();
+  }).catch(() => {
+    localStorage.removeItem('diasK.sessao');
+  });
 }
 
 function fecharLogin() {
@@ -2184,7 +1954,6 @@ function fecharLogin() {
 function mostrarFormulario() {
   loginForm.style.display = 'grid';
   loginSession.classList.remove('visivel');
-  googleLogin.style.display = '';
   loginToggle.style.display = '';
   loginTitulo.textContent = modoCadastro ? 'Começar sua jornada.' : 'Voltar para sua jornada.';
   loginIntro.textContent = modoCadastro ? 'Crie seu acesso neste dispositivo.' : 'Entre para continuar de onde parou.';
@@ -2195,16 +1964,9 @@ function mostrarFormulario() {
 function mostrarSessao() {
   loginForm.style.display = 'none';
   loginSession.classList.add('visivel');
-  googleLogin.style.display = 'none';
   loginTitulo.textContent = 'Sua jornada continua.';
   loginIntro.textContent = '';
   loginToggle.style.display = 'none';
-}
-
-async function criarHash(valor) {
-  const dados = new TextEncoder().encode(valor);
-  const hash = await crypto.subtle.digest('SHA-256', dados);
-  return Array.from(new Uint8Array(hash)).map(byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
 loginTrigger.addEventListener('click', event => {
@@ -2227,37 +1989,27 @@ loginForm.addEventListener('submit', async event => {
   event.preventDefault();
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
   const senha = document.getElementById('loginSenha').value;
-  const contaSalva = JSON.parse(localStorage.getItem('diasK.conta') || 'null');
   loginSubmit.disabled = true;
   loginMessage.textContent = '';
 
   try {
-    const senhaHash = await criarHash(senha);
-    if (modoCadastro) {
-      localStorage.setItem('diasK.conta', JSON.stringify({ email, senhaHash }));
-      localStorage.setItem('diasK.sessao', email);
-      mostrarSessao();
-    } else if (contaSalva && contaSalva.email === email && contaSalva.senhaHash === senhaHash) {
-      localStorage.setItem('diasK.sessao', email);
-      mostrarSessao();
-    } else {
-      loginMessage.textContent = 'E-mail ou senha não conferem.';
-    }
-  } catch {
-    loginMessage.textContent = 'Não foi possível concluir agora. Tente novamente.';
+    const data = await authRequest(modoCadastro ? 'signup' : 'login', { email, password: senha });
+    localStorage.setItem('diasK.sessao', data.user.email);
+    mostrarSessao();
+  } catch (error) {
+    loginMessage.textContent = error.message;
   } finally {
     loginSubmit.disabled = false;
   }
 });
 document.getElementById('loginLogout').addEventListener('click', () => {
-  localStorage.removeItem('diasK.sessao');
-  localStorage.removeItem('diasK.googleNome');
-  window.google?.accounts?.id.disableAutoSelect();
-  modoCadastro = false;
-  loginToggle.style.display = '';
-  mostrarFormulario();
+  authRequest('logout').catch(() => {}).finally(() => {
+    localStorage.removeItem('diasK.sessao');
+    modoCadastro = false;
+    loginToggle.style.display = '';
+    mostrarFormulario();
+  });
 });
-window.addEventListener('load', inicializarGoogleLogin);
 </script>
 </body>
 </html>
